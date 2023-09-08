@@ -7,8 +7,9 @@ class Car:
         self.car_height = 128
         self.position = [screen_width // 2, screen_height - self.car_height]  
 
-        self.speed = 0
         self.velocity = [0, 0]
+
+        self.speed = 0
         self.max_speed = 5
         self.acceleration = 0
         self.max_acceleration = 0.1
@@ -29,7 +30,7 @@ class Car:
             {"name": "brake_drift", "player": 4}
         ]
 
-    def update(self):
+    def update2(self):
         
         self.wheel_angle -= self.wheel_angle * self.friction  # Apply friction to the wheels
         self.direction += self.wheel_angle * (self.speed / 50.0)  # Adjusted turning dynamics
@@ -48,22 +49,21 @@ class Car:
         
         self.acceleration = 0
 
-    def update2(self):
+    def update(self):
         
-        self.direction += self.wheel_angle # * (self.speed / 50.0)
-
-        self.speed -= self.speed * (1 * self.friction)
+        self.direction += self.wheel_angle * (self.speed / 50.0)
 
         # Rotate the car image by the updated direction
         self.car_image = pygame.transform.rotate(self.original_car_image, -self.direction)
         self.car_rect = self.car_image.get_rect(center=(self.position[0] + self.car_width // 2, self.position[1] + self.car_height // 2))
-
+        
         self.car_rect.topleft = self.position
 
         self.speed = min(self.max_speed, max(-self.max_speed, self.speed + self.acceleration))
         self.position[0] += self.speed # * cos(radians(self.direction))
         self.position[1] -= self.speed # * sin(radians(self.direction))
-        
+
+        self.speed -= self.speed * (1 * self.friction)
         self.acceleration = 0
 
     def apply_force(self):
