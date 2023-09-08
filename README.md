@@ -8,6 +8,7 @@ After the installation, open the Anaconda Prompt (on Windows) or terminal (on Ma
 
 Step 3: Create a New Environment
 Using the Anaconda Prompt or terminal, create a new environment using the YAML file environment.yaml.
+Before this change the name of the enviroment at the top of the yaml file to whatever you want your venv to be called.
 
 conda env create -f environment.yaml
 
