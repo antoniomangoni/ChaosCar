@@ -1,4 +1,5 @@
 from math import cos, sin, radians
+import numpy as np
 import pygame
 
 class Car:
@@ -7,13 +8,13 @@ class Car:
         self.car_height = 128
         self.position = [screen_width // 2, screen_height - self.car_height]  
 
-        self.velocity = [0, 0]
+        self.velocity = np.array([0.0, 0.0])
 
-        self.speed = 0
+        self.speed = 0.0
         self.max_speed = 5
         self.acceleration = 0
         self.max_acceleration = 0.1
-        self.direction = 0  
+        self.direction = np.array([0.0, 0.0])
         self.turning_radius = 2  
         self.wheel_angle = 0  
         self.friction = self.max_acceleration / 2  
@@ -30,41 +31,31 @@ class Car:
             {"name": "brake_drift", "player": 4}
         ]
 
-    def update2(self):
-        
-        self.wheel_angle -= self.wheel_angle * self.friction  # Apply friction to the wheels
-        self.direction += self.wheel_angle * (self.speed / 50.0)  # Adjusted turning dynamics
+    def rot_center(self, image, angle):
+        loc = image.get_rect().center  #rot_image is not defined 
 
-        self.speed -= self.speed * (1 * self.friction)
+        rot_sprite = pygame.transform.rotate(image, angle)
 
-        # Rotate the car image by the updated direction
-        self.car_image = pygame.transform.rotate(self.original_car_image, -self.direction)
-        self.car_rect = self.car_image.get_rect(center=(self.position[0] + self.car_width // 2, self.position[1] + self.car_height // 2))
+        rot_sprite.get_rect().center = loc
 
-        self.car_rect.topleft = (self.position[0], self.position[1])
-
-        self.speed = min(self.max_speed, max(-self.max_speed, self.speed + self.acceleration))
-        self.position[0] += self.speed # * cos(radians(self.direction))
-        self.position[1] -= self.speed # * sin(radians(self.direction))
-        
-        self.acceleration = 0
-
+        return rot_sprite
+    
     def update(self):
         
-        self.direction += self.wheel_angle * (self.speed / 50.0)
-
-        # Rotate the car image by the updated direction
-        self.car_image = pygame.transform.rotate(self.original_car_image, -self.direction)
-        self.car_rect = self.car_image.get_rect(center=(self.position[0] + self.car_width // 2, self.position[1] + self.car_height // 2))
-        
-        self.car_rect.topleft = self.position
+        self.direction[0] = -sin(radians(self.wheel_angle))
+        self.direction[1] = -cos(radians(self.wheel_angle))
 
         self.speed = min(self.max_speed, max(-self.max_speed, self.speed + self.acceleration))
-        self.position[0] += self.speed # * cos(radians(self.direction))
-        self.position[1] -= self.speed # * sin(radians(self.direction))
+        self.position += self.direction * self.speed
 
         self.speed -= self.speed * (1 * self.friction)
         self.acceleration = 0
+        print(self.direction, self.speed, self.wheel_angle)
+
+        # Render Update: Rotate the car image by the updated direction
+        self.car_image = self.rot_center(self.original_car_image, self.wheel_angle)
+        self.car_rect = self.car_image.get_rect(center=self.position)
+        
 
     def apply_force(self):
         self.speed += self.acceleration
@@ -76,18 +67,16 @@ class Car:
         self.acceleration = max(-0.1, self.acceleration - 0.1)
 
     def steer_left(self):
-        if self.wheel_angle > -15:  
-            self.wheel_angle -= 1
+            self.wheel_angle = (self.wheel_angle + 1)%360
 
     def steer_right(self):
-        if self.wheel_angle < 15:  
-            self.wheel_angle += 1
+            self.wheel_angle = (self.wheel_angle - 1)%360
 
     def swap_roles(self):
         self.roles = [self.roles[-1]] + self.roles[:-1]
 
     def draw(self, screen):
-        screen.blit(self.car_image, self.car_rect.topleft)
+        screen.blit(self.car_image, self.car_rect)
 
     def get_rect(self):
         return self.rect

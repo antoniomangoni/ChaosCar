@@ -1,6 +1,6 @@
 # Main.py
 import pygame
-
+import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
