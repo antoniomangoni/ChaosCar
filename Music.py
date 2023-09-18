@@ -4,13 +4,15 @@ import time
 from mingus.containers import NoteContainer, Bar, Track, Composition
 import mingus.core.chords as chords
 from mingus.midi import midi_file_out
+from mingus.containers import Note
 
 class Music:
     def __init__(self):
         self.scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
         self.tempo = 120
-        self.note_fraction = 2
-        self.triplet = self.note_fraction * 3 / 2
+        self.half_note = 2
+        self.quarter_note = self.half_note * 2
+        self.eighth_note = self.quarter_note * 2
         self.comp = Composition()
         self.comp.set_title("simple_harmony")
         self.track = Track()
@@ -20,17 +22,49 @@ class Music:
         self.play_midi_file()
 
     def initialize_composition(self):
+        self.bass_track = Track()
         for i in range(0, len(self.scale)):
-            self.track.add_bar(self.create_bar(chords.minor_triad(self.scale[(i + 2) % 12]), self.note_fraction))       # ii
-            self.track.add_bar(self.create_bar(chords.major_triad(self.scale[(i + 4) % 12]), self.note_fraction))       # V
-            self.track.add_bar(self.create_bar(chords.major_triad(self.scale[i % 12]), self.note_fraction))             # I
-            self.track.add_bar(self.create_bar(chords.minor_triad(self.scale[(i + 5) % 12]), self.note_fraction*2))     # vi
-            self.track.add_bar(self.create_bar(chords.minor_triad(self.scale[(i + 2) % 12]), self.note_fraction*2))     # ii
-            self.track.add_bar(self.create_bar(chords.major_triad(self.scale[(i + 4) % 12]), self.note_fraction))       # V
-            self.track.add_bar(self.create_bar(chords.major_triad(self.scale[i % 12]), self.note_fraction))             # I
-            self.track.add_bar(self.create_bar(chords.diminished_triad(self.scale[(i + 11) % 12]), self.note_fraction*2)) # vii
-            self.track.add_bar(self.create_bar(chords.major_triad(self.scale[(i + 3) % 12]), self.note_fraction*2))       # IV
+            self.add_chord_progression_and_bassline(i)
         self.comp.add_track(self.track)
+        self.comp.add_track(self.bass_track)
+
+    def add_chord_progression_and_bassline(self, i):
+        chord_progressions  = [
+            chords.minor_triad(self.scale[(i + 2) % 12]),  # ii
+            chords.major_triad(self.scale[(i + 4) % 12]),  # V
+            chords.major_triad(self.scale[i % 12]),        # I
+            chords.minor_triad(self.scale[(i + 5) % 12]),  # vi
+            chords.minor_triad(self.scale[(i + 2) % 12]),  # ii
+            chords.major_triad(self.scale[(i + 4) % 12]),  # V
+            chords.major_triad(self.scale[i % 12]),        # I
+            chords.diminished_triad(self.scale[(i + 11) % 12]), # vii
+            chords.major_triad(self.scale[(i + 3) % 12]),  # IV
+        ]
+        
+        duration_list = [
+            self.half_note,
+            self.half_note,
+            self.half_note,
+            self.quarter_note,
+            self.quarter_note,
+            self.half_note,
+            self.half_note,
+            self.quarter_note,
+            self.quarter_note,
+        ]
+        
+        for chord_progression, duration in zip(chord_progressions, duration_list):
+            self.track.add_bar(self.create_bar(chord_progression, duration))
+            bassline_notes = [Note(chord_progression[1], 2), Note(chord_progression[2], 2), Note(chord_progression[1], 2), Note(chord_progression[0], 2)]
+            # bassline_notes = [Note(chord_progression[0], 2), Note(chord_progression[2], 2), Note(chord_progression[1], 2), Note(chord_progression[0], 2)]
+            bassline_durations = [self.eighth_note, self.eighth_note, self.eighth_note, self.eighth_note]
+            self.bass_track.add_bar(self.create_bassline_bar(bassline_notes, bassline_durations))
+
+    def create_bassline_bar(self, notes, durations):
+        bar = Bar()
+        for note, duration in zip(notes, durations):
+            bar.place_notes(NoteContainer([note]), duration)
+        return bar
 
     def create_bar(self, chord_notes, duration):
         bar = Bar()
