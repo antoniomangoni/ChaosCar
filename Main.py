@@ -17,6 +17,7 @@ class MainGame:
         
         self.car = Car(self.screen_width, self.screen_height)
         self.road = Road(self.screen_width, self.screen_height)
+        
         self.rendering = Rendering(self.screen, self.road, self.car)
         pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.play(-1)
@@ -55,7 +56,7 @@ class MainGame:
     def update(self):
         self.car.update()
         self.car.is_onroad(self.rendering)
-        print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
+        #print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
 
     def render(self):

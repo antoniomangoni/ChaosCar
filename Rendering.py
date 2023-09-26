@@ -1,6 +1,7 @@
 # Rendering.py
 import pygame
 import numpy as np
+from Background import Background
 
 class Rendering:
     def __init__(self, screen, road, car):
@@ -20,8 +21,7 @@ class Rendering:
         self.car_surface = pygame.Surface((self.car.car_width, self.car.car_height))
         
         # Render the background once
-        self.background = pygame.Surface(screen.get_size())
-        self.background.fill(self.bg_color)
+        self.background = Background(800,600)
 
         # camera parameters
         self.blackbackground = pygame.Surface(screen.get_size())
@@ -40,7 +40,7 @@ class Rendering:
 
         #when draw something at (x,y)
         # , need draw at (x-self.pos[0] + self.offset[0],y-self.pos[1] + self.offset[1])
-        self.screen.blit(self.background, (-self.pos[0] + self.offset[0], -self.pos[1] + self.offset[1]))
+        self.draw_background()
         self.draw_road()
         self.draw_car()
         pygame.display.flip()
@@ -69,4 +69,7 @@ class Rendering:
 
     def draw_car(self):
         self.car.draw(self.screen,self)
+
+    def draw_background(self):
+        self.background.draw(self.screen,self)
 
