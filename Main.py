@@ -55,12 +55,11 @@ class MainGame:
     def update(self):
         self.car.update()
         self.car.is_onroad(self.rendering)
-        print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
+        # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
 
     def render(self):
         self.rendering.draw_objects()
-
 
     def lateUpdate(self):
         self.rendering.lateUpdate()

@@ -6,7 +6,8 @@ class Car:
     def __init__(self, screen_width, screen_height):
         self.car_width = 128
         self.car_height = 128
-        self.position = [screen_width // 2, screen_height - self.car_height]  
+        self.position = [screen_width // 2, screen_height - self.car_height]
+        self.status = 0 # 0: on road, 1: partially off road, 2: completely off road
 
         self.velocity = np.array([0.0, 0.0])
 
@@ -83,6 +84,17 @@ class Car:
     def get_rect(self):
         return self.rect
     
+    def get_status(self):
+        if(self.isonroad and not self.ispartiallyoffroad):
+            self.status = 0
+            print("On road")
+        elif(self.isonroad and self.ispartiallyoffroad):
+            self.status = 1
+            print("Partially off road")
+        else: #
+            self.status = 2
+            print("Off road")
+
     def is_onroad(self,render):
         poly = Polygon(render.road_polygon_points)
         #centerpoint = Point(render.offset[0],render.offset[1])
@@ -109,4 +121,4 @@ class Car:
         self.ispartiallyoffroad = (not leftuppoint.within(poly)) or (not leftbottompoint.within(poly)) \
                                or (not rightbottompoint.within(poly)) or (not rightbottompoint.within(poly)) 
          
-    
+        return self.get_status()
