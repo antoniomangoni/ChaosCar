@@ -4,7 +4,6 @@ import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
-# from Sound import Sound
 # from LearningSimulation import LearningSimulation
 
 class MainGame:
@@ -19,7 +18,9 @@ class MainGame:
         self.car = Car(self.screen_width, self.screen_height)
         self.road = Road(self.screen_width, self.screen_height)
         self.rendering = Rendering(self.screen, self.road, self.car)
-        # self.sound = Sound()
+        pygame.mixer.music.load("simple_harmony.mid")
+        pygame.mixer.music.play(-1)
+
         # self.learning_simulation = LearningSimulation()
         
         self.role_timer = pygame.USEREVENT + 1
