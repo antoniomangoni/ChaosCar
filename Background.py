@@ -8,6 +8,7 @@ class Background:
         self.height = 420
         self.width = 630
         self.image = pygame.image.load('Pixel_Art/sand.png')
+        self.image =self.image.convert()
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect(topleft=(0,0))
         
@@ -25,6 +26,6 @@ class Background:
                 x+=self.width
             x = ox
             y+=self.height
-       
+        
 
        

@@ -121,4 +121,4 @@ class Car:
         self.ispartiallyoffroad = (not leftuppoint.within(poly)) or (not leftbottompoint.within(poly)) \
                                or (not rightbottompoint.within(poly)) or (not rightbottompoint.within(poly)) 
          
-        return self.get_status()
+        #return self.get_status()

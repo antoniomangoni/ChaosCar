@@ -56,7 +56,7 @@ class MainGame:
     def update(self):
         self.car.update()
         self.car.is_onroad(self.rendering)
-        #print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
+        # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
 
     def render(self):
@@ -66,13 +66,17 @@ class MainGame:
         self.rendering.lateUpdate()
 
     def run(self):
+
+        clock = pygame.time.Clock()
         while self.running:
             self.handle_events()
             self.check_key_states()
             self.update()
             self.render()   
             self.lateUpdate()      
-            self.clock.tick(60)
+            self.clock.tick(100)
+            print(self.clock.get_fps())
+        
         
         pygame.quit()
 if __name__ == "__main__":
