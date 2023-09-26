@@ -62,7 +62,6 @@ class MainGame:
     def render(self):
         self.rendering.draw_objects()
 
-
     def lateUpdate(self):
         self.rendering.lateUpdate()
 
