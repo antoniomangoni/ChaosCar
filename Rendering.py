@@ -28,8 +28,12 @@ class Rendering:
         self.blackbackground.fill((0,0,0))
         self.pos = self.car.position
         self.offset = [400,400]
+
         # road points
+        self.left_border, self.center_line, self.right_border = self.road.get_road_points()
         self.road_polygon_points=[]
+
+        
         
     def lateUpdate(self):
         self.pos = self.car.position
@@ -46,22 +50,30 @@ class Rendering:
         pygame.display.flip()
         
     def draw_road(self):
-        left_border, center_line, right_border = self.road.get_road_points()
+
         _left_border = [0,0]
         _right_border = [0,0]
         _center_line = [0,0]
-        _left_border[0] = left_border[0] - self.pos[0] + self.offset[0]
-        _left_border[1] = left_border[1] - self.pos[1] + self.offset[1]
-        _right_border[0] = right_border[0] - self.pos[0] + self.offset[0]
-        _right_border[1] = right_border[1] - self.pos[1] + self.offset[1]
-        _center_line[0] = center_line[0] - self.pos[0] + self.offset[0]
-        _center_line[1] = center_line[1] - self.pos[1] + self.offset[1]
-        pygame.draw.lines(self.screen, (0, 0, 0), False, np.transpose(_center_line), 2)
+
+        _left_border[0] = self.left_border[0] - self.pos[0] + self.offset[0]
+        _left_border[1] = self.left_border[1] - self.pos[1] + self.offset[1]
+        _right_border[0] = self.right_border[0] - self.pos[0] + self.offset[0]
+        _right_border[1] = self.right_border[1] - self.pos[1] + self.offset[1]
+
+        #_center_line[0] = self.center_line[0] - self.pos[0] + self.offset[0]
+        #_center_line[1] = self.center_line[1] - self.pos[1] + self.offset[1]
+
+        #pygame.draw.lines(self.screen, (0, 0, 0), False, np.transpose(_center_line), 2)
         pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_left_border), 2)
         pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_right_border), 2)
 
         self.road_polygon_points = np.concatenate((np.transpose(_left_border), np.transpose(_right_border)[::-1]), axis=0)
-        pygame.draw.polygon(self.screen, self.road_color, self.road_polygon_points)
+
+        #pygame.draw.polygon(self.screen, self.road_color, self.road_polygon_points)
+        poly_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
+        
+        pygame.draw.polygon(poly_surface, (255, 255, 255), self.road_polygon_points)
+        self.screen.blit(poly_surface,(0,0))
 
     def draw_road_texture(self):
         # TODO: Implement texture rendering for the road, jpg image is already loaded in self.road_texture
