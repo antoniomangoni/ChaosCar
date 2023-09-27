@@ -16,6 +16,7 @@ class Rendering:
         self.static_road_path = []
 
         self.road_texture = pygame.image.load('Pixel_Art/road_1.jpg')
+        self.road_texture=self.road_texture.convert()
 
         # Create a car surface at initialization to reuse in each frame
         self.car_surface = pygame.Surface((self.car.car_width, self.car.car_height))
@@ -32,7 +33,7 @@ class Rendering:
         # road points
         self.left_border, self.center_line, self.right_border = self.road.get_road_points()
         self.road_polygon_points=[]
-
+        self.road_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
         
         
     def lateUpdate(self):
@@ -64,20 +65,24 @@ class Rendering:
         #_center_line[1] = self.center_line[1] - self.pos[1] + self.offset[1]
 
         #pygame.draw.lines(self.screen, (0, 0, 0), False, np.transpose(_center_line), 2)
-        pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_left_border), 2)
-        pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_right_border), 2)
-
+        #pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_left_border), 2)
+        #pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_right_border), 2)
         self.road_polygon_points = np.concatenate((np.transpose(_left_border), np.transpose(_right_border)[::-1]), axis=0)
+        #clear screen
+        self.road_surface.fill((0,0,0,0))
+        pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
 
-        #pygame.draw.polygon(self.screen, self.road_color, self.road_polygon_points)
-        poly_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
-        
-        pygame.draw.polygon(poly_surface, (255, 255, 255), self.road_polygon_points)
-        self.screen.blit(poly_surface,(0,0))
+        #self.draw_road_texture()
+        self.screen.blit(self.road_surface,(0,0))
 
     def draw_road_texture(self):
-        # TODO: Implement texture rendering for the road, jpg image is already loaded in self.road_texture
-        pass
+
+        road_pixel = pygame.surfarray.pixels3d(self.road_surface)
+        road_pixel_copy=pygame.surfarray.array3d(self.road_surface)
+        road_image_pixel=pygame.surfarray.array3d(self.road_texture)
+        road_pixel[:,:]=road_image_pixel[:road_pixel.shape[0],:road_pixel.shape[1]]
+        #road_pixel[:,:]=road_image_pixel[:road_pixel.shape[0],20][:, np.newaxis]
+
 
     def draw_car(self):
         self.car.draw(self.screen,self)

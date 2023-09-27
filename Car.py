@@ -53,6 +53,7 @@ class Car:
         self.position += self.direction * self.speed
 
         self.speed -= self.speed * (1 * self.friction)
+
         self.acceleration = 0
         #print(self.direction, self.speed, self.wheel_angle)
 
@@ -64,10 +65,11 @@ class Car:
         self.speed += self.acceleration
 
     def accelerate(self):
-        self.acceleration = min(0.1, self.acceleration + 0.1)
+        if self.position[1]>-1980: self.acceleration = min(0.1, self.acceleration + 0.1)
+        
     
     def brake_or_drift(self):
-        self.acceleration = max(-0.1, self.acceleration - 0.1)
+        if self.position[1]<462: self.acceleration = max(-0.1, self.acceleration - 0.1)
 
     def steer_left(self):
             self.wheel_angle = (self.wheel_angle + 1)%360

@@ -24,7 +24,7 @@ class MainGame:
 
         # self.learning_simulation = LearningSimulation()
         
-        self.role_timer = pygame.USEREVENT + 1
+        self.role_timer = pygame.USEREVENT + 1  
         pygame.time.set_timer(self.role_timer, 3000) # 300 seconds interval for role swap
         
         self.running = True
