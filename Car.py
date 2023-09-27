@@ -34,6 +34,7 @@ class Car:
 
         self.isonroad = True
         self.ispartiallyoffroad = False
+        self.score = 0
 
     def rot_center(self, image, angle):
         loc = image.get_rect().center  #rot_image is not defined 
@@ -45,7 +46,7 @@ class Car:
         return rot_sprite
     
     def update(self):
-        
+        self.get_status()
         self.direction[0] = -sin(radians(self.wheel_angle))
         self.direction[1] = -cos(radians(self.wheel_angle))
 
@@ -89,13 +90,13 @@ class Car:
     def get_status(self):
         if(self.isonroad and not self.ispartiallyoffroad):
             self.status = 0
-            print("On road")
+            # print("On road")
         elif(self.isonroad and self.ispartiallyoffroad):
             self.status = 1
-            print("Partially off road")
+            # print("Partially off road")
         else: #
             self.status = 2
-            print("Off road")
+            # print("Off road")
 
     def is_onroad(self,render):
         poly = Polygon(render.road_polygon_points)
@@ -122,5 +123,14 @@ class Car:
         #corner point not on road
         self.ispartiallyoffroad = (not leftuppoint.within(poly)) or (not leftbottompoint.within(poly)) \
                                or (not rightbottompoint.within(poly)) or (not rightbottompoint.within(poly)) 
-         
-        #return self.get_status()
+    
+    def check_key_states(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            self.accelerate()
+        if keys[pygame.K_s]:
+            self.brake_or_drift()
+        if keys[pygame.K_a]:
+            self.steer_left()
+        if keys[pygame.K_d]:
+            self.steer_right()

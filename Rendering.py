@@ -33,12 +33,10 @@ class Rendering:
         # road points
         self.left_border, self.center_line, self.right_border = self.road.get_road_points()
         self.road_polygon_points=[]
-        self.road_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
-        
+        self.road_surface = pygame.Surface((800, 600), pygame.SRCALPHA)       
         
     def lateUpdate(self):
         self.pos = self.car.position
-
     
     def draw_objects(self):
         self.screen.blit(self.blackbackground, (0, 0))
