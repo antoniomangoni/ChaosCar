@@ -4,7 +4,7 @@ import numpy as np
 from Background import Background
 
 class Rendering:
-    def __init__(self, screen, road, car):
+    def __init__(self, screen, road, car, ui):
         self.screen = screen
         self.road = road
         self.car = car
@@ -35,6 +35,8 @@ class Rendering:
         self.road_polygon_points=[]
         self.road_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
         
+        # ui
+        self.ui = ui
         
     def lateUpdate(self):
         self.pos = self.car.position
@@ -48,8 +50,14 @@ class Rendering:
         self.draw_background()
         self.draw_road()
         self.draw_car()
+
+        self.draw_ui()
+
         pygame.display.flip()
-        
+    
+    def draw_ui(self):
+        self.ui.render(self)
+
     def draw_road(self):
 
         _left_border = [0,0]
