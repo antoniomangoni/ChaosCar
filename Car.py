@@ -7,7 +7,6 @@ class Car:
         self.car_width = 128
         self.car_height = 128
         self.position = [screen_width // 2, screen_height - self.car_height]
-        self.status = 0 # 0: on road, 1: partially off road, 2: completely off road
 
         self.velocity = np.array([0.0, 0.0])
 
@@ -19,6 +18,9 @@ class Car:
         self.turning_radius = 2  
         self.wheel_angle = 0  
         self.friction = self.max_acceleration / 2  
+
+        self.drift_speed_threshold = 0.5
+        self.drift_angle_threshold = 2
 
         self.original_car_image = pygame.image.load('Pixel_Art/car_blue_pixel.png')
         self.original_car_image = pygame.transform.scale(self.original_car_image, (self.car_width, self.car_height))
@@ -34,6 +36,9 @@ class Car:
 
         self.isonroad = True
         self.ispartiallyoffroad = False
+        self.drifting = False
+        self.status = 0 # 0: on road, 1: partially off road, 2: completely off road
+
 
     def rot_center(self, image, angle):
         loc = image.get_rect().center  #rot_image is not defined 
@@ -45,7 +50,7 @@ class Car:
         return rot_sprite
     
     def update(self):
-        
+        self.get_status()
         self.direction[0] = -sin(radians(self.wheel_angle))
         self.direction[1] = -cos(radians(self.wheel_angle))
 
@@ -69,7 +74,9 @@ class Car:
         
     
     def brake_or_drift(self):
-        if self.position[1]<462: self.acceleration = max(-0.1, self.acceleration - 0.1)
+        if self.speed > self.drift_speed_threshold and abs(self.wheel_angle) > self.drift_angle_threshold:
+            self.perform_drift()
+        # elif self.position[1]<462: self.acceleration = max(-0.1, self.acceleration - 0.1)
 
     def steer_left(self):
             self.wheel_angle = (self.wheel_angle + 1)%360
@@ -89,13 +96,13 @@ class Car:
     def get_status(self):
         if(self.isonroad and not self.ispartiallyoffroad):
             self.status = 0
-            print("On road")
+            # print("On road")
         elif(self.isonroad and self.ispartiallyoffroad):
             self.status = 1
-            print("Partially off road")
+            # print("Partially off road")
         else: #
             self.status = 2
-            print("Off road")
+            # print("Off road")
 
     def is_onroad(self,render):
         poly = Polygon(render.road_polygon_points)
@@ -123,4 +130,15 @@ class Car:
         self.ispartiallyoffroad = (not leftuppoint.within(poly)) or (not leftbottompoint.within(poly)) \
                                or (not rightbottompoint.within(poly)) or (not rightbottompoint.within(poly)) 
          
-        #return self.get_status()
+    def perform_drift(self):
+        drift_angle = radians(self.wheel_angle)
+        
+        v_parallel = self.speed * cos(drift_angle)
+        v_perpendicular = self.speed * sin(drift_angle)
+        
+        v_perpendicular += self.acceleration * sin(drift_angle)
+        
+        orientation_direction = np.array([cos(radians(self.wheel_angle)), sin(radians(self.wheel_angle))])
+        drift_direction = np.array([-sin(radians(self.wheel_angle)), cos(radians(self.wheel_angle))])
+        
+        self.position += v_parallel * orientation_direction + v_perpendicular * drift_direction

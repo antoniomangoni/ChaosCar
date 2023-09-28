@@ -23,8 +23,6 @@ class MainGame:
         self.rendering = Rendering(self.screen, self.road, self.car,self.ui)
         pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.play(-1)
-
-        # self.learning_simulation = LearningSimulation()
         
         self.role_timer = pygame.USEREVENT + 1  
         pygame.time.set_timer(self.role_timer, 3000) # 300 seconds interval for role swap
@@ -54,7 +52,7 @@ class MainGame:
         
         if keys[pygame.K_w]:
             self.call_control_method("accelerator", self.car.accelerate)
-        if keys[pygame.K_s]:
+        if keys[pygame.K_SPACE]:
             self.call_control_method("brake_drift", self.car.brake_or_drift)
         if keys[pygame.K_a] and not keys[pygame.K_d]:
             self.call_control_method("steerer_left", self.car.steer_left)
@@ -71,6 +69,7 @@ class MainGame:
         # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
         self.ui.update()
+        # print(self.car.status())
 
     def render(self):
         self.rendering.draw_objects()
@@ -96,7 +95,7 @@ class MainGame:
             self.render()   
             self.lateUpdate()      
             ms = self.clock.tick(100)
-            #print(self.clock.get_fps())
+            # print(self.clock.get_fps())
 
             self.elapsedTime += ms
             self.secondscounter += ms
