@@ -95,7 +95,7 @@ class MainGame:
             self.render()   
             self.lateUpdate()      
             ms = self.clock.tick(100)
-            # print(self.clock.get_fps())
+            print(self.clock.get_fps())
 
             self.elapsedTime += ms
             self.secondscounter += ms

@@ -70,13 +70,13 @@ class Car:
         self.speed += self.acceleration
 
     def accelerate(self):
-        if self.position[1]>-1980: self.acceleration = min(0.1, self.acceleration + 0.1)
+        self.acceleration = min(0.1, self.acceleration + 0.1)
         
     
     def brake_or_drift(self):
+        self.acceleration = max(-0.1, self.acceleration - 0.1)
         if self.speed > self.drift_speed_threshold and abs(self.wheel_angle) > self.drift_angle_threshold:
             self.perform_drift()
-        # elif self.position[1]<462: self.acceleration = max(-0.1, self.acceleration - 0.1)
 
     def steer_left(self):
             self.wheel_angle = (self.wheel_angle + 1)%360

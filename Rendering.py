@@ -15,12 +15,22 @@ class Rendering:
         self.car_height = 40
         self.static_road_path = []
 
+
+
+        self.screen_width=800
+        self.screen_height=600
         self.road_texture = pygame.image.load('Pixel_Art/road_1.jpg')
         self.road_texture=self.road_texture.convert()
 
         # Create a car surface at initialization to reuse in each frame
         self.car_surface = pygame.Surface((self.car.car_width, self.car.car_height))
-        
+
+        # Create a road surface at initialization to reuse in each frame
+        self.road_surface = pygame.Surface((self.screen_width, self.screen_height), pygame.SRCALPHA)
+        # Get road control point to render
+        self.right_border, self.left_border = self.road.get_road_points()
+        self.road_polygon_points=[]
+
         # Render the background once
         self.background = Background(800,600)
 
@@ -29,11 +39,6 @@ class Rendering:
         self.blackbackground.fill((0,0,0))
         self.pos = self.car.position
         self.offset = [400,400]
-
-        # road points
-        self.left_border, self.center_line, self.right_border = self.road.get_road_points()
-        self.road_polygon_points=[]
-        self.road_surface = pygame.Surface((800, 600), pygame.SRCALPHA)
         
         # ui
         self.ui = ui
@@ -62,34 +67,40 @@ class Rendering:
 
         _left_border = [0,0]
         _right_border = [0,0]
-        _center_line = [0,0]
+        
+        _left_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.left_border]
+        _right_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.right_border]
+ 
+        #get road point
+        self.road_polygon_points = np.concatenate((self.visible(_left_border),self.visible(_right_border)[::-1]),axis=0)
 
-        _left_border[0] = self.left_border[0] - self.pos[0] + self.offset[0]
-        _left_border[1] = self.left_border[1] - self.pos[1] + self.offset[1]
-        _right_border[0] = self.right_border[0] - self.pos[0] + self.offset[0]
-        _right_border[1] = self.right_border[1] - self.pos[1] + self.offset[1]
-
-        #_center_line[0] = self.center_line[0] - self.pos[0] + self.offset[0]
-        #_center_line[1] = self.center_line[1] - self.pos[1] + self.offset[1]
-
-        #pygame.draw.lines(self.screen, (0, 0, 0), False, np.transpose(_center_line), 2)
-        #pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_left_border), 2)
-        #pygame.draw.lines(self.screen, (255, 255, 255), False, np.transpose(_right_border), 2)
-        self.road_polygon_points = np.concatenate((np.transpose(_left_border), np.transpose(_right_border)[::-1]), axis=0)
         #clear screen
         self.road_surface.fill((0,0,0,0))
-        pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
 
-        #self.draw_road_texture()
+        #need?
+        #pygame.draw.lines(self.road_surface,(0,0,0),False,_left_border,2)
+        #pygame.draw.lines(self.road_surface,(0,0,0),False,_right_border,2)
+
+        pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
         self.screen.blit(self.road_surface,(0,0))
 
-    def draw_road_texture(self):
 
-        road_pixel = pygame.surfarray.pixels3d(self.road_surface)
-        road_pixel_copy=pygame.surfarray.array3d(self.road_surface)
-        road_image_pixel=pygame.surfarray.array3d(self.road_texture)
-        road_pixel[:,:]=road_image_pixel[:road_pixel.shape[0],:road_pixel.shape[1]]
-        #road_pixel[:,:]=road_image_pixel[:road_pixel.shape[0],20][:, np.newaxis]
+    def visible(self,road_point):
+        screen_min_y=self.offset[1]-450
+        screen_max_y=300+self.offset[1]
+        visible_border=road_point
+
+        num=[]
+        for i in range(len(visible_border)):
+            if visible_border[i][1]>screen_max_y or visible_border[i][1]<screen_min_y:
+                num.append(i)
+
+        visible_border=np.delete(visible_border,num[:], 0)
+        return visible_border
+    
+    
+    def draw_road_texture(self):
+        pass
 
 
     def draw_car(self):
