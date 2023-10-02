@@ -1,11 +1,9 @@
 # Main.py
 import pygame
-import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
-# from LearningSimulation import LearningSimulation
 
 class MainGame:
     def __init__(self):
@@ -95,7 +93,9 @@ class MainGame:
             self.render()   
             self.lateUpdate()      
             ms = self.clock.tick(100)
-            print(self.clock.get_fps())
+            fps = self.clock.get_fps()
+            if fps < 90:
+                print(fps)
 
             self.elapsedTime += ms
             self.secondscounter += ms
@@ -105,7 +105,6 @@ class MainGame:
                 self.seconds+=1
                 self.updateScore()
                 
-        
         pygame.quit()
 
 if __name__ == "__main__":
