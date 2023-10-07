@@ -38,7 +38,8 @@ class Car:
         self.ispartiallyoffroad = False
         self.drifting = False
         self.status = 0 # 0: on road, 1: partially off road, 2: completely off road
-
+        self.previous_pos=self.position
+        self.move=False
 
     def rot_center(self, image, angle):
         loc = image.get_rect().center  #rot_image is not defined 
@@ -56,9 +57,14 @@ class Car:
 
         self.speed = min(self.max_speed, max(-self.max_speed, self.speed + self.acceleration))
         self.position += self.direction * self.speed
+        
+        if  self.position[0]==self.previous_pos[0] and self.position[1]==self.previous_pos[1]:
+            self.move=False
+        else:
+            self.move=True
+        #self.previous_pos=self.position
 
         self.speed -= self.speed * (1 * self.friction)
-
         self.acceleration = 0
         #print(self.direction, self.speed, self.wheel_angle)
 

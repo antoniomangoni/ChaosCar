@@ -55,8 +55,11 @@ class Rendering:
         self.draw_background()
         self.draw_road()
         self.draw_car()
+        if(self.ui.game_state):self.draw_ui()
+        else: self.ui.game_end(self)
 
-        self.draw_ui()
+        if self.pos[1]<self.road.road_end_position[1]+150:
+            self.ui.game_state=False
 
         pygame.display.flip()
     
@@ -86,8 +89,8 @@ class Rendering:
 
 
     def visible(self,road_point):
-        screen_min_y=self.offset[1]-450
-        screen_max_y=300+self.offset[1]
+        screen_min_y=self.offset[1]-500
+        screen_max_y=350+self.offset[1]
         visible_border=road_point
 
         num=[]

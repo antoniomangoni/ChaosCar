@@ -9,19 +9,29 @@ class Road:
         self.control_points=[]
         self.control_point_variance = control_point_variance
         self.road_width = road_width
-
+        self.road_end_position=[0,0]
         #add start
         self.control_points.append((500,900))
         self.control_points.append((500,200))
         self.control_points.append((500,0))
 
+        #road point position
+        self.road_min_x=0
+        self.road_max_x=0
+        self.road_min_y=0
+        self.road_max_y=0
+
         for i in range(3,road_length):
             n=i%3
             m=((np.random.randint(-self.screen_width, self.screen_width)*n),-150*i)
             self.control_points.append(m)
-            
+        
+        self.road_end_position=self.control_points[-1]
 
-        self.tck, self.u = splprep(np.transpose(self.control_points), u=None, s=0.0)
+        self.control_points.append((self.control_points[-1][0],-150*(road_length+3)))
+
+        
+        
 
 
     def calculate_bezier(self, points, t):
@@ -57,43 +67,20 @@ class Road:
             new_x = x2 + self.road_width * normal_x[0]
             new_y = y2 + self.road_width * normal_x[1]
             left_border.append((int(new_x), int(new_y)))
+
+        all_border=np.concatenate((left_border,right_border),axis=0)
+        all_border=np.transpose(all_border)
+        self.road_min_x=np.min(all_border[0])
+        self.road_max_x=np.max(all_border[0])
+        self.road_min_y=np.min(all_border[1])
+        self.road_max_y=np.max(all_border[1])
+
         return right_border,left_border
 
-        """Gets points along the Bezier curve and calculates points perpendicular to the curve for the road borders."""
-        u_new = np.linspace(self.u.min(), self.u.max(), num_points)
 
-        x, y = splev(u_new, self.tck, der=0)
-        dx, dy = splev(u_new, self.tck, der=1)
-        angle = np.arctan2(dy, dx)
+    def road_pixel_set(self):
         
-        left_border_x = x + self.road_width / 2 * np.cos(angle + np.pi / 2)
-        left_border_y = y + self.road_width / 2 * np.sin(angle + np.pi / 2)
-
-        right_border_x = x - self.road_width / 2 * np.cos(angle + np.pi / 2)
-        right_border_y = y - self.road_width / 2 * np.sin(angle + np.pi / 2)
-
-
-        for i in range(left_border_y.size):
-            if i>0:
-                if left_border_y[i]<left_border_y[i-1]:
-                    continue
-                else:
-                    left_border_y[i]=left_border_y[i-1]+3
-
-        for i in range(right_border_y.size):
-            if i>0:
-                if right_border_y[i]<right_border_y[i-1]:
-                    continue
-                else:
-                    right_border_y[i]=right_border_y[i-1]+3
-
-        #sort border but have a bug, wiating for fix
-        #right_sort_index=(np.argsort(right_border_y))[::-1]
-        #right_border_y=right_border_y[right_sort_index]
-        #right_border_x=right_border_x[right_sort_index]
-
-
-        return (left_border_x, left_border_y), (x, y), (right_border_x, right_border_y)
+        pass
     
 
 

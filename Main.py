@@ -64,7 +64,8 @@ class MainGame:
             method()
 
     def update(self):
-        self.car.update()
+        if self.ui.game_state:
+            self.car.update()
         self.car.is_onroad(self.rendering)
         # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
@@ -100,10 +101,12 @@ class MainGame:
             self.elapsedTime += ms
             self.secondscounter += ms
 
-            if self.secondscounter>1000:
-                self.secondscounter -= 1000
-                self.seconds+=1
-                self.updateScore()
+
+            if self.ui.game_state:
+                if self.secondscounter>1000:
+                    self.secondscounter -= 1000
+                    self.seconds+=1
+                    self.updateScore()
                 
         
         pygame.quit()
