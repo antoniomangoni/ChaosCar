@@ -15,8 +15,6 @@ class Rendering:
         self.car_height = 40
         self.static_road_path = []
 
-
-
         self.screen_width=800
         self.screen_height=600
         self.road_texture = pygame.image.load('Pixel_Art/road_1.jpg')
