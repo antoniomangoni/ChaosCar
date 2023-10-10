@@ -4,6 +4,7 @@ from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
+from Background import Background
 
 class MainGame:
     def __init__(self):
@@ -16,9 +17,10 @@ class MainGame:
         
         self.car = Car(self.screen_width, self.screen_height)
         self.road = Road(self.screen_width, self.screen_height)
+        self.background = Background(800,600)
         
         self.ui = UI(self)
-        self.rendering = Rendering(self.screen, self.road, self.car,self.ui)
+        self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background)
         pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.play(-1)
         
@@ -94,7 +96,7 @@ class MainGame:
             self.update()
             self.render()   
             self.lateUpdate()      
-            ms = self.clock.tick(100)
+            ms = self.clock.tick(90)
             fps = self.clock.get_fps()
             if fps < 90:
                 pass

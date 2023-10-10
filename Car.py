@@ -5,7 +5,7 @@ from math import sin, cos, radians
 
 class Car:
     def __init__(self, screen_width, screen_height):
-        self.car_width = 128
+        self.car_width = 64
         self.car_height = 128
         self.position = [screen_width // 2, screen_height - self.car_height]
 
@@ -34,7 +34,7 @@ class Car:
         self.relative_angle = 0
         self.delta_angle = 0.2 
 
-        self.original_car_image = pygame.image.load('Pixel_Art/car_blue_pixel.png')
+        self.original_car_image = pygame.image.load('Pixel_Art/car.png').convert_alpha()
         self.original_car_image = pygame.transform.scale(self.original_car_image, (self.car_width, self.car_height))
         self.car_image = self.original_car_image.copy()
         self.car_rect = self.car_image.get_rect(center=(screen_width//2, screen_height - self.car_height//2))
@@ -162,6 +162,7 @@ class Car:
 
     def draw(self, screen, render):
         screen.blit(self.car_image, [self.car_rect.x-render.pos[0]+render.offset[0],self.car_rect.y-render.pos[1]+render.offset[1]])
+        #print([self.car_rect.x,self.car_rect.y])  
 
     def get_rect(self):
         return self.rect

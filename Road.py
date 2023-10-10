@@ -30,10 +30,6 @@ class Road:
 
         self.control_points.append((self.control_points[-1][0],-150*(road_length+3)))
 
-        
-        
-
-
     def calculate_bezier(self, points, t):
         n = len(points) - 1
         x, y = 0, 0
@@ -76,7 +72,6 @@ class Road:
         self.road_max_y=np.max(all_border[1])
 
         return right_border,left_border
-
 
     def road_pixel_set(self):
         
