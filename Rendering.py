@@ -1,10 +1,10 @@
 # Rendering.py
 import pygame
 import numpy as np
-from Background import Background
+from Plants import Plants
 
 class Rendering:
-    def __init__(self, screen, road, car, ui):
+    def __init__(self, screen, road, car, ui,background):
         self.screen = screen
         self.road = road
         self.car = car
@@ -14,8 +14,6 @@ class Rendering:
         self.car_width = 20
         self.car_height = 40
         self.static_road_path = []
-
-
 
         self.screen_width=800
         self.screen_height=600
@@ -32,7 +30,8 @@ class Rendering:
         self.road_polygon_points=[]
 
         # Render the background once
-        self.background = Background(800,600)
+        self.background = background
+        self.plants = Plants(self.screen_width,self.screen_height,self.road,self)
 
         # camera parameters
         self.blackbackground = pygame.Surface(screen.get_size())
@@ -55,8 +54,11 @@ class Rendering:
         self.draw_background()
         self.draw_road()
         self.draw_car()
+        if(self.ui.game_state):self.draw_ui()
+        else: self.ui.game_end(self)
 
-        self.draw_ui()
+        if self.pos[1]<self.road.road_end_position[1]+150:
+            self.ui.game_state=False
 
         pygame.display.flip()
     
@@ -86,8 +88,8 @@ class Rendering:
 
 
     def visible(self,road_point):
-        screen_min_y=self.offset[1]-450
-        screen_max_y=300+self.offset[1]
+        screen_min_y=self.offset[1]-500
+        screen_max_y=350+self.offset[1]
         visible_border=road_point
 
         num=[]
@@ -108,4 +110,5 @@ class Rendering:
 
     def draw_background(self):
         self.background.draw(self.screen,self)
+        self.plants.draw(self.screen,self)
 

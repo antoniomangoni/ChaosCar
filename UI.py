@@ -13,6 +13,8 @@ class UI:
         self.font = pygame.font.SysFont('Courier', 48)
         self.game = game
 
+
+        self.game_state=True
         self.tipfont = pygame.font.SysFont('Courier', 56, True)
         self.tipcounter = 0
 
@@ -36,11 +38,14 @@ class UI:
         self.control_images["steerer_left"]=self.leftbtn_image
 
         self.btnbackground_image = pygame.image.load('Pixel_Art/btnbackground.png')
+        self.tipfont_1 = pygame.font.SysFont('Courier', 80, True)
+        self.tipfont_1.set_italic(True)
 
     def update(self):
         return
 
     def render(self,rendering):
+
         self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
 
@@ -71,3 +76,13 @@ class UI:
         
         
 
+
+    def game_end(self,rendering):
+        self.timeimg = self.tipfont_1.render('Game Finish', True, RED)
+        rendering.screen.blit(self.timeimg, (150, 200))
+
+        self.timeimg = self.tipfont_1.render('Time: '+str(self.game.seconds), True, RED)
+        rendering.screen.blit(self.timeimg, (150, 270))
+
+        self.timeimg = self.tipfont_1.render('Score: '+str(self.game.scores), True, RED)
+        rendering.screen.blit(self.timeimg, (150, 340))

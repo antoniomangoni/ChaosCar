@@ -1,12 +1,12 @@
 # Main.py
 import pygame
-import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
 #from Pi import Pi
 # from LearningSimulation import LearningSimulation
+from Background import Background
 
 class MainGame:
     def __init__(self):
@@ -19,9 +19,10 @@ class MainGame:
         
         self.car = Car(self.screen_width, self.screen_height)
         self.road = Road(self.screen_width, self.screen_height)
+        self.background = Background(800,600)
         
         self.ui = UI(self)
-        self.rendering = Rendering(self.screen, self.road, self.car,self.ui)
+        self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background)
         pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.play(-1)
         
@@ -80,7 +81,8 @@ class MainGame:
             method()
 
     def update(self):
-        self.car.update()
+        if self.ui.game_state:
+            self.car.update()
         self.car.is_onroad(self.rendering)
         # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
         # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
@@ -111,18 +113,22 @@ class MainGame:
             self.update()
             self.render()   
             self.lateUpdate()      
-            ms = self.clock.tick(100)
-            #print(self.clock.get_fps())
+            ms = self.clock.tick(90)
+            fps = self.clock.get_fps()
+            if fps < 90:
+                pass
+                #print(fps)
 
             self.elapsedTime += ms
             self.secondscounter += ms
 
-            if self.secondscounter>1000:
-                self.secondscounter -= 1000
-                self.seconds+=1
-                self.updateScore()
+
+            if self.ui.game_state:
+                if self.secondscounter>1000:
+                    self.secondscounter -= 1000
+                    self.seconds+=1
+                    self.updateScore()
                 
-        
         pygame.quit()
 
 if __name__ == "__main__":
