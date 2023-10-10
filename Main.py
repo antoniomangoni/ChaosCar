@@ -79,7 +79,8 @@ class MainGame:
     def updateScore(self):
         score = 0
         if self.car.isonroad:
-            score = 1
+            if self.car.move: score = 1
+            else: score=0
         else :
             score = -1
         self.scores += score
@@ -96,7 +97,8 @@ class MainGame:
             ms = self.clock.tick(100)
             fps = self.clock.get_fps()
             if fps < 90:
-                print(fps)
+                pass
+                #print(fps)
 
             self.elapsedTime += ms
             self.secondscounter += ms

@@ -50,7 +50,9 @@ class Car:
         self.drifting = False
         self.state = 0 # 0: on road, 1: partially off road, 2: completely off road
         self.friction_model = np.array([self.friction, self.friction * 1.5, self.friction * 2])
-    
+
+        self.previous_pos_x=0
+        self.move = False
     def update(self):
         # Update state and friction
         self.update_state()
@@ -76,6 +78,15 @@ class Car:
             self.speed += delta_speed
 
             self.position += self.direction * self.speed
+
+        if self.previous_pos_x == self.position[1]:
+            self.move=False
+        else: 
+            self.move=True
+        
+        self.previous_pos_x = self.position[1]
+        
+
 
         # Reset accelerating flag
         self.accelerating = False
