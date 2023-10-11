@@ -15,8 +15,8 @@ class Background:
         for i in range(4):
             self.images[i] = self.images[i].convert()
             self.images[i] = pygame.transform.scale(self.images[i], (self.height, self.width))
-        self.w =np.int8(self.screenWidth/self.width)+2
-        self.h =np.int8(self.screenHeight/self.height)+2
+        self.w =np.int8(self.screenWidth/self.width)+3
+        self.h =np.int8(self.screenHeight/self.height)+3
         self.surface = pygame.Surface((screen_width,screen_height))
 
     '''

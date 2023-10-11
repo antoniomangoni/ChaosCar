@@ -1,6 +1,7 @@
 # Rendering.py
 import pygame
 import numpy as np
+import pygame.gfxdraw
 from Plants import Plants
 
 class Rendering:
@@ -17,7 +18,7 @@ class Rendering:
 
         self.screen_width=800
         self.screen_height=600
-        self.road_texture = pygame.image.load('Pixel_Art/road_1.jpg')
+        self.road_texture = pygame.image.load('Pixel_Art/road_2.jpg')
         self.road_texture=self.road_texture.convert()
 
         # Create a car surface at initialization to reuse in each frame
@@ -82,8 +83,10 @@ class Rendering:
         #need?
         #pygame.draw.lines(self.road_surface,(0,0,0),False,_left_border,2)
         #pygame.draw.lines(self.road_surface,(0,0,0),False,_right_border,2)
-
-        pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
+        m=np.random.randint(0,15)
+        n=np.random.randint(0,15)
+        pygame.gfxdraw.textured_polygon(self.road_surface, self.road_polygon_points, self.road_texture,-int(self.pos[0]),int(self.pos[1]))
+        #pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
         self.screen.blit(self.road_surface,(0,0))
 
 

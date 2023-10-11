@@ -117,7 +117,7 @@ class MainGame:
             fps = self.clock.get_fps()
             if fps < 90:
                 pass
-                #print(fps)
+                print(fps)
 
             self.elapsedTime += ms
             self.secondscounter += ms
@@ -125,7 +125,7 @@ class MainGame:
 
             if self.ui.game_state:
                 if self.secondscounter>1000:
-                    self.secondscounter -= 1000
+                    self.secondscounter -= 1000*9   
                     self.seconds+=1
                     self.updateScore()
                 

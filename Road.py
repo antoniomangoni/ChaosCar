@@ -3,7 +3,7 @@ from scipy.interpolate import splprep, splev
 import numpy as np
 
 class Road:
-    def __init__(self, screen_width, screen_height, control_point_variance=600, road_width=150, road_length=30):
+    def __init__(self, screen_width, screen_height, control_point_variance=600, road_width=150, road_length=100):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.control_points=[]
@@ -20,10 +20,13 @@ class Road:
         self.road_max_x=0
         self.road_min_y=0
         self.road_max_y=0
+        self.all_border=0
 
         for i in range(3,road_length):
-            n=i%3
-            m=((np.random.randint(-self.screen_width, self.screen_width)*n),-150*i)
+            n=i%4
+            #m=np.random.randint(2*n*self.screen_width, n*self.screen_width)
+            m=((np.random.uniform(-self.screen_width, self.screen_width)*n),-150*i)
+            #m=((np.random.randint(-self.screen_width, self.screen_width)*n),-100*i)
             self.control_points.append(m)
         
         self.road_end_position=self.control_points[-1]
@@ -40,7 +43,7 @@ class Road:
         return x, y
 
 
-    def get_road_points(self, num_points=150):
+    def get_road_points(self, num_points=250):
         right_border=[]
         left_border=[]
 
@@ -52,7 +55,6 @@ class Road:
         for i in range(1, len(right_border) - 1):
             x1, y1 = right_border[i - 1]
             x2, y2 = right_border[i]
-            x3, y3 = right_border[i + 1]
 
             tangent_x = x2 - x1, y2 - y1
             tangent_length = np.sqrt(tangent_x[0] ** 2 + tangent_x[1] ** 2)
@@ -64,14 +66,19 @@ class Road:
             new_y = y2 + self.road_width * normal_x[1]
             left_border.append((int(new_x), int(new_y)))
 
-        all_border=np.concatenate((left_border,right_border),axis=0)
-        all_border=np.transpose(all_border)
-        self.road_min_x=np.min(all_border[0])
-        self.road_max_x=np.max(all_border[0])
-        self.road_min_y=np.min(all_border[1])
-        self.road_max_y=np.max(all_border[1])
+        self.all_border=np.concatenate((left_border,right_border),axis=0)
+        self.all_border=np.transpose(self.all_border)
+
+        self.road_min_x=np.min(self.all_border[0])
+        self.road_max_x=np.max(self.all_border[0])
+        self.road_min_y=np.min(self.all_border[1])
+        self.road_max_y=np.max(self.all_border[1])
 
         return right_border,left_border
+    def polygon_pointer(self):
+        return self.all_border
+
+
 
     def road_pixel_set(self):
         
