@@ -62,7 +62,7 @@ class UI:
                     self.tipimg = self.tipfont.render('!!OFF ROAD!!', True, YELLOW)
                     rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 500 - self.tipimg.get_height() // 2))
 
-        rendering.screen.blit(self.btnbackground_image, (0, 500))
+        rendering.screen.blit(self.btnbackground_image, (0, 520))
 
         for i in range(len(self.game.car.roles)):
             role_name = self.game.car.roles[i]["name"]
@@ -72,7 +72,7 @@ class UI:
             if self.game.btn_status_dict[role_name]==True:
                 offset = 10
 
-            rendering.screen.blit(control_image, (150+500/4*i+32, 510+offset))
+            rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
         
         
 
