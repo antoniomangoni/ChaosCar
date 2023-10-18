@@ -49,8 +49,8 @@ class UI:
         self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
 
-        self.scoreimg = self.font.render('SCORE:'+str(self.game.scores), True, RED)
-        rendering.screen.blit(self.scoreimg, (550, 20))
+        self.scoreimg = self.font.render('SCORE:'+str(int(self.game.scores)), True, RED)
+        rendering.screen.blit(self.scoreimg, (530, 20))
         
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:

@@ -42,7 +42,6 @@ class Road:
             y += coef * py
         return x, y
 
-
     def get_road_points(self, num_points=250):
         right_border=[]
         left_border=[]
@@ -75,15 +74,9 @@ class Road:
         self.road_max_y=np.max(self.all_border[1])
 
         return right_border,left_border
+    
     def polygon_pointer(self):
         return self.all_border
 
-
-
     def road_pixel_set(self):
-        
         pass
-    
-
-
-

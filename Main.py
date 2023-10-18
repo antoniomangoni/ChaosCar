@@ -1,11 +1,9 @@
-# Main.py
 import pygame
 from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
 #from Pi import Pi
-# from LearningSimulation import LearningSimulation
 from Background import Background
 
 class MainGame:
@@ -43,8 +41,6 @@ class MainGame:
         self.btn_status_dict={}
 
         #self.Pi = Pi(self)
-
-
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -96,16 +92,21 @@ class MainGame:
         self.rendering.lateUpdate()
 
     def updateScore(self):
+        self.scores += self.getStepScore()
+    
+    def getStepScore(self):
         score = 0
         if self.car.isonroad:
-            if self.car.move: score = 1
+            if self.car.move:
+                score = 0.1
+                if self.car.drifting:
+                    score += 0.2
             else: score=0
         else :
-            score = -1
-        self.scores += score
+            score = -0.2
+        return score
 
     def run(self):
-
         clock = pygame.time.Clock()
         while self.running:
             self.handle_events()
@@ -121,13 +122,13 @@ class MainGame:
 
             self.elapsedTime += ms
             self.secondscounter += ms
-
+            self.updateScore()
 
             if self.ui.game_state:
                 if self.secondscounter>1000:
                     self.secondscounter -= 1000*9   
                     self.seconds+=1
-                    self.updateScore()
+                    # self.updateScore()
                 
         pygame.quit()
 
