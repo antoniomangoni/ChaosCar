@@ -1,13 +1,16 @@
 import gymnasium as gym
 import numpy as np
 from Main import MainGame
+from pygame import surfarray
 
 class CarGameEnv(gym.Env):
     def __init__(self):
         super().__init__()
-        self.observation_space = gym.spaces.Box(low=np.array([0, 0, 0, -180]), high=np.array([800, 600, 10, 180]), dtype=np.float32)
         self.action_space = gym.spaces.Discrete(4)
         self.game_instance = MainGame()
+        self.observation_space = gym.spaces.Box(low=0, high=255,
+                                                shape=(self.game_instance.screen_height, self.game_instance.screen_width, 3),
+                                                dtype=np.uint8)
 
     def reset(self, seed=None, options=None):
         self.game_instance = MainGame()
@@ -30,13 +33,14 @@ class CarGameEnv(gym.Env):
         reward = self._get_reward()
         done = self._is_done()
         info = {}
-        print(f"CarGameEnv --> State: {next_state}, Reward: {reward}, Done: {done}")
-        return next_state, reward, done, info
+        # print(f"CarGameEnv --> Reward: {reward}, Done: {done}")
+        truncated = False
+        return next_state, reward, done, truncated, info
 
     def _get_state(self):
-        car = self.game_instance.car
-        return np.array([car.position[0], car.position[1], car.speed, car.wheel_angle]).astype(np.float32)
-
+        screen = surfarray.array3d(self.game_instance.screen)
+        # print(f"CarGameEnv --> Screen shape: {screen.shape}")
+        return screen.reshape(self.observation_space.shape)
 
     def _get_reward(self):
         return self.game_instance.getStepScore()

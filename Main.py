@@ -105,7 +105,10 @@ class MainGame:
         else :
             score = -0.2
         return score
-
+    
+    def getScreen(self):
+        return pygame.surfarray.array3d(self.screen)
+    
     def run(self):
         clock = pygame.time.Clock()
         while self.running:

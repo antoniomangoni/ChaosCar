@@ -1,4 +1,3 @@
-# Rendering.py
 import pygame
 import numpy as np
 import pygame.gfxdraw
@@ -50,7 +49,7 @@ class Rendering:
     def draw_objects(self):
         self.screen.blit(self.blackbackground, (0, 0))
 
-        #when draw something at (x,y)
+        # when draw something at (x,y)
         # , need draw at (x-self.pos[0] + self.offset[0],y-self.pos[1] + self.offset[1])
         self.draw_background()
         self.draw_road()
@@ -67,7 +66,6 @@ class Rendering:
         self.ui.render(self)
 
     def draw_road(self):
-
         _left_border = [0,0]
         _right_border = [0,0]
         
@@ -89,7 +87,6 @@ class Rendering:
         #pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
         self.screen.blit(self.road_surface,(0,0))
 
-
     def visible(self,road_point):
         screen_min_y=self.offset[1]-500
         screen_max_y=350+self.offset[1]
@@ -103,10 +100,8 @@ class Rendering:
         visible_border=np.delete(visible_border,num[:], 0)
         return visible_border
     
-    
     def draw_road_texture(self):
         pass
-
 
     def draw_car(self):
         self.car.draw(self.screen,self)
@@ -114,4 +109,3 @@ class Rendering:
     def draw_background(self):
         self.background.draw(self.screen,self)
         self.plants.draw(self.screen,self)
-

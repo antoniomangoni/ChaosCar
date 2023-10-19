@@ -3,6 +3,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from Models import CarNN
 import gymnasium as gym
+from gymnasium.wrappers import GrayScaleObservation, ResizeObservation
 import numpy as np
 
 gym.envs.registration.register(
@@ -10,10 +11,13 @@ gym.envs.registration.register(
     entry_point='CarGameEnv:CarGameEnv',
 )
 
-env = gym.make('ChaosCarGameEnv')
-state_dim = env.observation_space.shape[0]
+env = GrayScaleObservation(gym.make('ChaosCarGameEnv'), keep_dim=False)
+env = ResizeObservation(env, shape=84)
+
+state_shape = env.observation_space.shape
 action_dim = env.action_space.n
-model = CarNN(state_dim, action_dim)
+
+model = CarNN(state_shape, action_dim)
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 num_epochs = 10
@@ -22,14 +26,19 @@ for epoch in range(num_epochs):
     state_np = state_tuple[0]
     done = False
     while not done:
-        state_tensor = torch.tensor(state_np)
+        # Add batch and channel dimension since it is grey scale
+        state_tensor = torch.tensor(state_np).unsqueeze(0).unsqueeze(0).float() / 255.0 
+    
         action_prob = model(state_tensor)
-        action = torch.argmax(action_prob).item()
-        next_state, reward, done, _ = env.step(action)
+        print(f"LearningSimulation --> Action probabilities: {action_prob}")
+        action = torch.argmax(action_prob, dim=1).item()
+        # print(f"LearningSimulation --> Action: {action}")
+        next_state, reward, done, _, _ = env.step(action)
         state = next_state
 
         optimizer.zero_grad()
-        loss = -torch.log(action_prob[action]) * reward  # Assume a simple REINFORCE loss
+        print(f"LearningSimulation --> Action: {action}, Reward: {reward}")
+        loss = -torch.log(action_prob[0, action]) * reward
         loss.backward()
         optimizer.step()
 
