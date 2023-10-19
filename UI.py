@@ -41,6 +41,11 @@ class UI:
         self.tipfont_1 = pygame.font.SysFont('Courier', 80, True)
         self.tipfont_1.set_italic(True)
 
+
+
+
+
+
     def update(self):
         return
 
@@ -55,12 +60,12 @@ class UI:
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:
                 self.tipimg = self.tipfont.render('!!!OFF ROAD!!!', True, RED)
-                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 500 - self.tipimg.get_height() // 2))
+                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
         else:
             if self.game.car.ispartiallyoffroad:
                 if self.game.elapsedTime%200 > 100:
                     self.tipimg = self.tipfont.render('!!OFF ROAD!!', True, YELLOW)
-                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 500 - self.tipimg.get_height() // 2))
+                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
 
         rendering.screen.blit(self.btnbackground_image, (0, 500))
 
@@ -75,10 +80,11 @@ class UI:
             rendering.screen.blit(control_image, (150+500/4*i+32, 510+offset))
         
         
-
+    def change_role(self):
+        pass
 
     def game_end(self,rendering):
-        self.timeimg = self.tipfont_1.render('Game Finish', True, RED)
+        self.timeimg = self.tipfont_1.render('Game Finish!', True, RED)
         rendering.screen.blit(self.timeimg, (150, 200))
 
         self.timeimg = self.tipfont_1.render('Time: '+str(self.game.seconds), True, RED)
