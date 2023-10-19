@@ -111,6 +111,7 @@ class MainGame:
             score = -1
         self.scores += score
         if self.scores<=0: self.scores=0
+        return score
 
     def run(self):
         clock = pygame.time.Clock()
