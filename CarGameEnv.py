@@ -13,7 +13,7 @@ class CarGameEnv(gym.Env):
                                                 dtype=np.uint8)
 
     def reset(self, seed=None, options=None):
-        self.game_instance = MainGame()
+        self.game_instance = MainGame(switch=False)
         obs = self._get_state()
         info = {}
         return obs, info

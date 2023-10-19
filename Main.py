@@ -8,10 +8,10 @@ from UI import UI
 from Background import Background
 
 class MainGame:
-    def __init__(self):
+    def __init__(self, switch=True):
         pygame.init()
         self.clock = pygame.time.Clock()
-        
+        self.switch = switch
         self.screen_width = 800
         self.screen_height = 600
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
@@ -107,10 +107,8 @@ class MainGame:
                 if self.car.drifting:
                     score += 0.2
             else: score=0
-        else :
-            score = -1
-        self.scores += score
-        if self.scores<=0: self.scores=0
+        elif self.scores>0:
+            score = -0.075
         return score
     
     def getScreen(self):
@@ -140,15 +138,12 @@ class MainGame:
                     self.seconds+=1
                     self.change=True
                     self.updateScore()
-                if self.seconds%15 == 0:
+                if self.seconds%15 == 0 and self.switch == True:
                     if self.seconds > 0 and self.change:
                         self.car.swap_roles()
                         self.controlM = [self.controlM[-1]] + self.controlM[:-1]
                         self.change = False
 
-
-
-                
         pygame.quit()
 
 if __name__ == "__main__":

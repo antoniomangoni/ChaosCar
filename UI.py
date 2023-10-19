@@ -41,21 +41,15 @@ class UI:
         self.tipfont_1 = pygame.font.SysFont('Courier', 80, True)
         self.tipfont_1.set_italic(True)
 
-
-
-
-
-
     def update(self):
         return
 
     def render(self,rendering):
-
         self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
 
         self.scoreimg = self.font.render('SCORE:'+str(int(self.game.scores)), True, RED)
-        rendering.screen.blit(self.scoreimg, (530, 20))
+        rendering.screen.blit(self.scoreimg, (510, 20))
         
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:
