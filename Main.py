@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
@@ -40,40 +41,44 @@ class MainGame:
         self.scores = 0
         self.btn_status_dict={}
 
-        #self.Pi = Pi(self)
+        self.controlM = []
+        self.change = False
+
+        self.controlM = [self.car.accelerate,self.car.brake_or_drift,self.car.steer_left,self.car.steer_right]
+
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == self.role_timer:
-                # self.car.swap_roles()
+                # self.car.swap_roles()6
                 pass
 
     def check_key_states(self):
         keys = pygame.key.get_pressed()
-        #keys = self.Pi.read_input()
 
         self.btn_status_dict['accelerator']=False
         self.btn_status_dict['steerer_left']=False
         self.btn_status_dict['brake_drift']=False
         self.btn_status_dict['steerer_right']=False
-
+        
+        
         if keys[pygame.K_w]:
-            self.call_control_method("accelerator", self.car.accelerate)
+            self.call_control_method("accelerator", self.controlM[0])
             self.btn_status_dict['accelerator']=True
         if keys[pygame.K_SPACE]:
-            self.call_control_method("brake_drift", self.car.brake_or_drift)
+            self.call_control_method("brake_drift", self.controlM[1])
             self.btn_status_dict['brake_drift']=True
         if keys[pygame.K_a] and not keys[pygame.K_d]:
-            self.call_control_method("steerer_left", self.car.steer_left)
+            self.call_control_method("steerer_left", self.controlM[2])
             self.btn_status_dict['steerer_left']=True
         if keys[pygame.K_d] and not keys[pygame.K_a]:
-            self.call_control_method("steerer_right", self.car.steer_right)
+            self.call_control_method("steerer_right", self.controlM[3])
             self.btn_status_dict['steerer_right']=True
 
     def call_control_method(self, role_name, method):
-        if any(role["name"] == role_name for role in self.car.roles):
+        #if any(role["name"] == role_name for role in self.car.roles):
             method()
 
     def update(self):
@@ -103,8 +108,9 @@ class MainGame:
                     score += 0.2
             else: score=0
         else :
-            score = -0.2
-        return score
+            score = -1
+        self.scores += score
+        if self.scores<=0: self.scores=0
 
     def run(self):
         clock = pygame.time.Clock()
@@ -118,7 +124,7 @@ class MainGame:
             fps = self.clock.get_fps()
             if fps < 90:
                 pass
-                print(fps)
+                #print(fps)
 
             self.elapsedTime += ms
             self.secondscounter += ms
@@ -126,9 +132,18 @@ class MainGame:
 
             if self.ui.game_state:
                 if self.secondscounter>1000:
-                    self.secondscounter -= 1000*9   
+                    self.secondscounter = 0   
                     self.seconds+=1
-                    # self.updateScore()
+                    self.change=True
+                    self.updateScore()
+                if self.seconds%15 == 0:
+                    if self.seconds > 0 and self.change:
+                        self.car.swap_roles()
+                        self.controlM = [self.controlM[-1]] + self.controlM[:-1]
+                        self.change = False
+
+
+
                 
         pygame.quit()
 
