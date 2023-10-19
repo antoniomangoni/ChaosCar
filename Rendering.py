@@ -57,7 +57,7 @@ class Rendering:
         if(self.ui.game_state):self.draw_ui()
         else: self.ui.game_end(self)
 
-        if self.pos[1]<self.road.road_end_position[1]+150:
+        if self.pos[1]<self.road.road_end_position[1]+450:
             self.ui.game_state=False
 
         pygame.display.flip()
@@ -83,6 +83,7 @@ class Rendering:
         #pygame.draw.lines(self.road_surface,(0,0,0),False,_right_border,2)
         m=np.random.randint(0,15)
         n=np.random.randint(0,15)
+        
         pygame.gfxdraw.textured_polygon(self.road_surface, self.road_polygon_points, self.road_texture,-int(self.pos[0]),int(self.pos[1]))
         #pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
         self.screen.blit(self.road_surface,(0,0))

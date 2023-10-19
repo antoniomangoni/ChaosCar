@@ -7,7 +7,8 @@ class Car:
     def __init__(self, screen_width, screen_height):
         self.car_width = 64
         self.car_height = 128
-        self.position = [screen_width // 2, screen_height - self.car_height]
+        #self.position = [screen_width // 2, screen_height - self.car_height]
+        self.position = [550,-2000]
 
         self.velocity = np.array([0.0, 0.0])
         self.max_velocity = 2
@@ -83,10 +84,10 @@ class Car:
                 if self.drifting_conditions():
                     self.perform_drift()
 
-        if self.previous_pos_x == self.position[1]:
-            self.move=False
-        else: 
+        if self.previous_pos_x > self.position[1]:
             self.move=True
+        else: 
+            self.move=False 
         
         self.previous_pos_x = self.position[1]
         
