@@ -45,21 +45,22 @@ class UI:
         return
 
     def render(self,rendering):
+
         self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
 
         self.scoreimg = self.font.render('SCORE:'+str(int(self.game.scores)), True, RED)
-        rendering.screen.blit(self.scoreimg, (510, 20))
+        rendering.screen.blit(self.scoreimg, (550, 20))
         
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:
                 self.tipimg = self.tipfont.render('!!!OFF ROAD!!!', True, RED)
-                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
+                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 500 - self.tipimg.get_height() // 2))
         else:
             if self.game.car.ispartiallyoffroad:
                 if self.game.elapsedTime%200 > 100:
                     self.tipimg = self.tipfont.render('!!OFF ROAD!!', True, YELLOW)
-                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
+                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 500 - self.tipimg.get_height() // 2))
 
         rendering.screen.blit(self.btnbackground_image, (0, 520))
 
@@ -74,11 +75,10 @@ class UI:
             rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
         
         
-    def change_role(self):
-        pass
+
 
     def game_end(self,rendering):
-        self.timeimg = self.tipfont_1.render('Game Finish!', True, RED)
+        self.timeimg = self.tipfont_1.render('Game Finish', True, RED)
         rendering.screen.blit(self.timeimg, (150, 200))
 
         self.timeimg = self.tipfont_1.render('Time: '+str(self.game.seconds), True, RED)
