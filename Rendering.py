@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 import pygame.gfxdraw
 from Plants import Plants
-
+WHITE = (225,225,225)
 class Rendering:
     def __init__(self, screen, road, car, ui,background):
         self.screen = screen
@@ -43,7 +43,7 @@ class Rendering:
         self.ui = ui
         self.start_surface = pygame.image.load('Pixel_Art/startmenuimage.png')
         self.start_surface = pygame.transform.scale(self.start_surface, (800, 600))
-        
+
     def lateUpdate(self):
         self.pos = self.car.position
     
@@ -57,6 +57,12 @@ class Rendering:
         if self.ui.game_state == 'start': 
             #self.draw_ui()
             self.screen.blit(self.start_surface,(0,0))
+
+            if self.ui.game.elapsedTime%200 > 100:
+                self.ui.tipimg = self.ui.tipfont.render('PRESS WHITE BUTTON', True, WHITE)
+                self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 490 - self.ui.tipimg.get_height() // 2))
+                self.ui.tipimg = self.ui.tipfont.render('TO START!', True, WHITE)
+                self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 535 - self.ui.tipimg.get_height() // 2))
             pygame.display.flip()
             return
         self.draw_background()

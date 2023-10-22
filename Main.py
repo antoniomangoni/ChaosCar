@@ -18,6 +18,7 @@ class MainGame:
         
         self.screen_width = 800
         self.screen_height = 600
+        #self.screen = pygame.display.set_mode((self.screen_width, self.screen_height),pygame.FULLSCREEN)
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         
         self.car = Car(self.screen_width, self.screen_height,self)
@@ -135,11 +136,13 @@ class MainGame:
 
     def state_check(self):
         keys = pygame.key.get_pressed()
+        if keys[pygame.K_q] :
+            quit()
         if keys[pygame.K_u] and self.ui.game_state == "start": 
             self.ui.game_state="running"
             self.running=True
             return
-        if keys[pygame.K_u] and self.ui.game_state == "running": 
+        if keys[pygame.K_u] and self.ui.game_state == "running" and self.elapsedTime>3000: 
             self.ui.game_state="restart"
             return
         if keys[pygame.K_u] and self.ui.game_state == "end": 
@@ -174,14 +177,13 @@ class MainGame:
                         self.seconds+=1
                         self.change=True
                         self.updateScore()
-                    if self.seconds%5 == 0:
+                    if self.seconds%10 == 0:
                         if self.seconds > 0 and self.change:
                             self.car.swap_roles()
                             self.controlM = [self.controlM[-1]] + self.controlM[:-1]
                             self.change = False
                 break
             self.render()   
-        #pygame.quit()
 
 if __name__ == "__main__":
 

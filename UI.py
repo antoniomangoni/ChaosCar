@@ -11,20 +11,22 @@ WHITE = (225,225,225)
 
 class UI:
     def __init__(self,game):
-        self.font = pygame.font.SysFont('Courier', 48)
+
+        self.font = pygame.font.Font('ka1.ttf', 40)
         self.game = game
 
 
         self.game_state = "start"
 
-        self.tipfont = pygame.font.SysFont('Courier', 52, True)
+        self.tipfont = pygame.font.Font('ka1.ttf', 40)
         self.tipcounter = 0
-        self.tipfont_1 = pygame.font.SysFont('Courier', 60, True)
+        self.tipfont_1 = pygame.font.Font('ka1.ttf', 55)
         self.tipcounter = 0
-        self.tipfont_2 = pygame.font.SysFont('Courier', 80, True)
-        self.tipfont_2.set_italic(True)
-        self.tipfont_3 = pygame.font.SysFont('Courier', 35, True)
-        self.tipfont_3.set_italic(True)
+        #self.tipfont_2 = pygame.font.SysFont('Courier', 80, True)
+        self.tipfont_2 = pygame.font.Font('ka1.ttf',45)
+        #self.tipfont_2.set_italic(True)
+        self.tipfont_3 = pygame.font.Font('ka1.ttf', 30)
+        #self.tipfont_3.set_italic(True)
 
 
         self.control_images = {}
@@ -47,8 +49,6 @@ class UI:
         self.control_images["steerer_left"]=self.leftbtn_image
 
         self.btnbackground_image = pygame.image.load('Pixel_Art/btnbackground.png')
-        self.tipfont_1 = pygame.font.SysFont('Courier', 80, True)
-        self.tipfont_1.set_italic(True)
 
         self.HPBar_image = pygame.image.load('Pixel_Art/HPBar.png')
         self.HPBar_image = pygame.transform.scale(self.HPBar_image, (320, 64))
@@ -57,6 +57,7 @@ class UI:
 
         self.offroadwarning_image = pygame.image.load('Pixel_Art/offroadwarning_fullscreen.png')
         self.offroadwarning_image = pygame.transform.scale(self.offroadwarning_image, (800, 600))
+        self.offroadwarning_image = self.offroadwarning_image.convert_alpha()
     def update(self):
         pass
 
@@ -70,12 +71,16 @@ class UI:
             rendering.screen.blit(self.offroadwarning_image, (0, 0))
 
 
-        self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
+        self.timeimg = self.font.render('TIME', True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
+        self.timeimg = self.font.render(str(self.game.seconds), True, RED)
+        rendering.screen.blit(self.timeimg, (55, 60))
 
-        self.scoreimg = self.font.render('SCORE:'+str(int(self.game.scores)), True, RED)
-        rendering.screen.blit(self.scoreimg, (550, 20))
-        
+        self.scoreimg = self.font.render('SCORE', True, RED)
+        rendering.screen.blit(self.scoreimg, (580, 20))
+        self.scoreimg = self.font.render(str(int(self.game.scores)), True, RED)
+        rendering.screen.blit(self.scoreimg, (645, 60))
+
         # Show does car on the roaad
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:
@@ -84,7 +89,7 @@ class UI:
         else:
             if self.game.car.ispartiallyoffroad:
                 if self.game.elapsedTime%200 > 100:
-                    self.tipimg = self.tipfont.render('OFF ROAD', True, YELLOW)
+                    self.tipimg = self.tipfont.render('!OFF ROAD!', True, YELLOW)
                     rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
         # show background
         rendering.screen.blit(self.btnbackground_image, (0, 517))
@@ -115,14 +120,20 @@ class UI:
                     break
 
     def game_end(self,rendering):
-        self.timeimg = self.tipfont_1.render('Game Finish', True, RED)
+        self.timeimg = self.tipfont_1.render('GAME OVER!', True, RED)
         rendering.screen.blit(self.timeimg, (150, 200))
 
-        self.timeimg = self.tipfont_2.render('Time: '+str(self.game.seconds), True, RED)
+        self.timeimg = self.tipfont_2.render('TIME: '+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (150, 270))
 
-        self.timeimg = self.tipfont_2.render('Score: '+str(self.game.scores), True, RED)
+        self.timeimg = self.tipfont_2.render('SCORE: '+str(self.game.scores), True, RED)
         rendering.screen.blit(self.timeimg, (150, 340))
-    
+
+        if self.ui.game.elapsedTime%200 > 100:
+            self.ui.tipimg = self.ui.tipfont.render('PRESS WHITE BUTTON', True, WHITE)
+            self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 490 - self.ui.tipimg.get_height() // 2))
+            self.ui.tipimg = self.ui.tipfont.render('TO RESTART!', True, WHITE)
+            self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 535 - self.ui.tipimg.get_height() // 2))
+
     def change_ui_state(self, state="start"):
         self.game_state = state
