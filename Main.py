@@ -9,6 +9,8 @@ from UI import UI
 # from LearningSimulation import LearningSimulation
 from Background import Background
 
+import gc
+
 class MainGame:
     def __init__(self):
         pygame.init()
@@ -29,7 +31,7 @@ class MainGame:
         pygame.mixer.music.load("race_main.wav")
         pygame.mixer.music.play(-1)
         self.sound_offroad = pygame.mixer.Sound("offroad.wav")
-        self.sound_offroad.set_volume(0.35)
+        self.sound_offroad.set_volume(0.30)
 
         self.role_timer = pygame.USEREVENT + 1  
         pygame.time.set_timer(self.role_timer, 3000) # 300 seconds interval for role swap
@@ -53,6 +55,11 @@ class MainGame:
         self.controlM = [self.car.accelerate,self.car.brake_or_drift,self.car.steer_left,self.car.steer_right]
 
         #self.Pi = PI(self) don't delete this!
+
+        self.btn_status_dict['accelerator']=False
+        self.btn_status_dict['steerer_left']=False
+        self.btn_status_dict['brake_drift']=False
+        self.btn_status_dict['steerer_right']=False
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -131,15 +138,19 @@ class MainGame:
         if keys[pygame.K_u] and self.ui.game_state == "start": 
             self.ui.game_state="running"
             self.running=True
-        if keys[pygame.K_u] and self.ui.game_state == "running": self.ui.game_state="restart"
+            return
+        if keys[pygame.K_u] and self.ui.game_state == "running": 
+            self.ui.game_state="restart"
+            return
         if self.car.position[1]<self.road.road_end_position[1]+450:
             self.ui.game_state="end"
+            return
 
 
     def run(self):
         clock = pygame.time.Clock()
         while True:
-            self.render()   
+            
             self.state_check()
             if self.ui.game_state=="restart" : 
                 break
@@ -150,9 +161,6 @@ class MainGame:
                 self.lateUpdate()      
                 ms = self.clock.tick(90)
                 fps = self.clock.get_fps()
-                if fps < 90:
-                    pass
-                    #print(fps)
 
                 self.elapsedTime += ms
                 self.secondscounter += ms
@@ -169,15 +177,13 @@ class MainGame:
                             self.controlM = [self.controlM[-1]] + self.controlM[:-1]
                             self.change = False
                 break
-
-
-
-                
+            self.render()   
         #pygame.quit()
 
 if __name__ == "__main__":
-    ae86=0
+
     while True:
         game = MainGame()
         game.run()
+        gc.collect()
 

@@ -70,20 +70,20 @@ class UI:
         rendering.screen.blit(self.timeimg, (20, 20))
 
         self.scoreimg = self.font.render('SCORE:'+str(int(self.game.scores)), True, RED)
-        rendering.screen.blit(self.scoreimg, (500, 20))
+        rendering.screen.blit(self.scoreimg, (550, 20))
         
         # Show does car on the roaad
         if not self.game.car.isonroad:
             if self.game.elapsedTime%200 > 100:
                 self.tipimg = self.tipfont_1.render('!!!OFF ROAD!!!', True, RED)
-                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
+                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
         else:
             if self.game.car.ispartiallyoffroad:
                 if self.game.elapsedTime%200 > 100:
                     self.tipimg = self.tipfont.render('OFF ROAD', True, YELLOW)
-                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 400 - self.tipimg.get_height() // 2))
+                    rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
         # show background
-        rendering.screen.blit(self.btnbackground_image, (0, 520))
+        rendering.screen.blit(self.btnbackground_image, (0, 517))
 
         # show button
         for i in range(len(self.game.car.roles)):
@@ -99,7 +99,7 @@ class UI:
         rendering.screen.blit(self.HPBar_image, (220, 20))
         HPpercent = self.game.car.HP/100.0
         if self.game.car.HP>=0:
-            for i in range(5):#0 1 2 3 4
+            for i in range(5):
                 if HPpercent>=i*0.25:
                     rendering.screen.blit(self.HP_image, (220+i*64, 20))
                 else:
@@ -109,7 +109,6 @@ class UI:
                     else:
                         rendering.screen.blit(self.HP_image, (220+i*64, 20))
                     break
-
 
     def game_end(self,rendering):
         self.timeimg = self.tipfont_1.render('Game Finish', True, RED)

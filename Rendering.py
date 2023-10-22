@@ -41,11 +41,11 @@ class Rendering:
         
         # ui
         self.ui = ui
-        self.start_surface = pygame.Surface(screen.get_size())
+        self.start_surface = pygame.image.load('Pixel_Art/startmenuimage.png')
+        self.start_surface = pygame.transform.scale(self.start_surface, (800, 600))
         
     def lateUpdate(self):
         self.pos = self.car.position
-
     
     def draw_objects(self):
         #self.screen.blit(self.blackbackground, (0, 0))
@@ -55,7 +55,7 @@ class Rendering:
 
 
         if self.ui.game_state == 'start': 
-            self.draw_ui()
+            #self.draw_ui()
             self.screen.blit(self.start_surface,(0,0))
             pygame.display.flip()
             return
