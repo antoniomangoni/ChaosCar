@@ -95,15 +95,17 @@ class UI:
         rendering.screen.blit(self.btnbackground_image, (0, 517))
 
         # show button
-        for i in range(len(self.game.car.roles)):
-            role_name = self.game.car.roles[i]["name"]
-            control_image = self.control_images[role_name]
+        if (self.game.willswaprole and self.game.elapsedTime%200 > 100) or not self.game.willswaprole:
+            for i in range(len(self.game.car.roles)):
+                role_name = self.game.car.roles[i]["name"]
+                control_image = self.control_images[role_name]
 
-            offset = 0
-            if self.game.btn_status_dict[role_name]==True:
-                offset = 10
+                offset = 0
+                if self.game.btn_status_dict[role_name]==True:
+                    offset = 10
 
-            rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
+                rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
+
         
         rendering.screen.blit(self.HPBar_image, (220, 20))
         HPpercent = self.game.car.HP/100.0

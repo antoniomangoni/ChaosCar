@@ -20,7 +20,7 @@ class MainGame:
         self.screen_height = 600
         #self.screen = pygame.display.set_mode((self.screen_width, self.screen_height),pygame.FULLSCREEN)
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        
+
         self.car = Car(self.screen_width, self.screen_height,self)
         self.road = Road(self.screen_width, self.screen_height)
         self.background = Background(800,600)
@@ -61,6 +61,9 @@ class MainGame:
         self.btn_status_dict['steerer_left']=False
         self.btn_status_dict['brake_drift']=False
         self.btn_status_dict['steerer_right']=False
+
+        self.willswaprole = False
+        self.swapTime = 10
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -177,11 +180,14 @@ class MainGame:
                         self.seconds+=1
                         self.change=True
                         self.updateScore()
-                    if self.seconds%10 == 0:
+                    if (self.seconds+2)%self.swapTime==0:
+                        self.willswaprole = True
+                    if self.seconds%self.swapTime == 0:
                         if self.seconds > 0 and self.change:
                             self.car.swap_roles()
                             self.controlM = [self.controlM[-1]] + self.controlM[:-1]
                             self.change = False
+                            self.willswaprole = False
                 break
             self.render()   
 
