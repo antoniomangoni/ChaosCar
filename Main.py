@@ -1,17 +1,19 @@
+# Main.py
 import pygame
 import numpy as np
 from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
-#from Pi import PI
+#from Pi import Pi
+# from LearningSimulation import LearningSimulation
 from Background import Background
 
 class MainGame:
-    def __init__(self, switch=True):
+    def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.switch = switch
+        
         self.screen_width = 800
         self.screen_height = 600
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
@@ -89,7 +91,7 @@ class MainGame:
             method()
 
     def update(self):
-        if self.ui.game_state:
+        if self.ui.game_state == "running":
             self.car.update()
         self.car.is_onroad(self.rendering)
 
@@ -115,55 +117,67 @@ class MainGame:
         self.rendering.lateUpdate()
 
     def updateScore(self):
-        self.scores += self.getStepScore()
-    
-    def getStepScore(self):
         score = 0
         if self.car.isonroad:
-            if self.car.move:
-                score = 0.1
-                if self.car.drifting:
-                    score += 0.2
+            if self.car.move: score = 1
             else: score=0
-        elif self.scores>0:
-            score = -0.075
-        return score
-    
-    def getScreen(self):
-        return pygame.surfarray.array3d(self.screen)
-    
+        else :
+            score = -1
+        self.scores += score
+        if self.scores<=0: self.scores=0
+
+    def state_check(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_u] and self.ui.game_state == "start": 
+            self.ui.game_state="running"
+            self.running=True
+        if keys[pygame.K_u] and self.ui.game_state == "running": self.ui.game_state="restart"
+        if self.car.position[1]<self.road.road_end_position[1]+450:
+            self.ui.game_state="end"
+
+
     def run(self):
         clock = pygame.time.Clock()
-        while self.running:
-            self.handle_events()
-            self.check_key_states()
-            self.update()
+        while True:
             self.render()   
-            self.lateUpdate()      
-            ms = self.clock.tick(90)
-            fps = self.clock.get_fps()
-            if fps < 90:
-                pass
-                #print(fps)
+            self.state_check()
+            if self.ui.game_state=="restart" : 
+                break
+            while self.running:
+                self.handle_events()
+                self.check_key_states()
+                self.update()
+                self.lateUpdate()      
+                ms = self.clock.tick(90)
+                fps = self.clock.get_fps()
+                if fps < 90:
+                    pass
+                    #print(fps)
 
-            self.elapsedTime += ms
-            self.secondscounter += ms
-            self.updateScore()
-           
-            if self.ui.game_state:
-                if self.secondscounter>1000:
-                    self.secondscounter = 0   
-                    self.seconds+=1
-                    self.change=True
-                    self.updateScore()
-                if self.seconds%15 == 0 and self.switch == True:
-                    if self.seconds > 0 and self.change:
-                        self.car.swap_roles()
-                        self.controlM = [self.controlM[-1]] + self.controlM[:-1]
-                        self.change = False
+                self.elapsedTime += ms
+                self.secondscounter += ms
 
-        pygame.quit()
+                if self.ui.game_state == "running":
+                    if self.secondscounter>1000:
+                        self.secondscounter = 0   
+                        self.seconds+=1
+                        self.change=True
+                        self.updateScore()
+                    if self.seconds%5 == 0:
+                        if self.seconds > 0 and self.change:
+                            self.car.swap_roles()
+                            self.controlM = [self.controlM[-1]] + self.controlM[:-1]
+                            self.change = False
+                break
+
+
+
+                
+        #pygame.quit()
 
 if __name__ == "__main__":
-    game = MainGame()
-    game.run()
+    ae86=0
+    while True:
+        game = MainGame()
+        game.run()
+

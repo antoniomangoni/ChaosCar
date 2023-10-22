@@ -41,24 +41,28 @@ class Rendering:
         
         # ui
         self.ui = ui
+        self.start_surface = pygame.Surface(screen.get_size())
         
     def lateUpdate(self):
         self.pos = self.car.position
 
     
     def draw_objects(self):
-        self.screen.blit(self.blackbackground, (0, 0))
+        #self.screen.blit(self.blackbackground, (0, 0))
 
         # when draw something at (x,y)
         # , need draw at (x-self.pos[0] + self.offset[0],y-self.pos[1] + self.offset[1])
+
+
+        if self.ui.game_state == 'start': 
+            self.draw_ui()
+            self.screen.blit(self.start_surface,(0,0))
+            pygame.display.flip()
+            return
         self.draw_background()
         self.draw_road()
         self.draw_car()
-        if(self.ui.game_state):self.draw_ui()
-        else: self.ui.game_end(self)
-
-        if self.pos[1]<self.road.road_end_position[1]+450:
-            self.ui.game_state=False
+        self.draw_ui()
 
         pygame.display.flip()
     
