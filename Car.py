@@ -42,10 +42,10 @@ class Car:
         self.car_rect = self.car_image.get_rect(center=(screen_width//2, screen_height - self.car_height//2))
 
         self.roles = [
-            {"name": "accelerator", "player": 1},
-            {"name": "steerer_left", "player": 2},
-            {"name": "steerer_right", "player": 3},
-            {"name": "brake_drift", "player": 4}
+            {"name": "accelerator"},
+            {"name": "brake_drift"},
+            {"name": "steerer_left"},
+            {"name": "steerer_right"},
         ]
 
         self.isonroad = True

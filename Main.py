@@ -63,7 +63,7 @@ class MainGame:
         self.btn_status_dict['steerer_right']=False
 
         self.willswaprole = False
-        self.swapTime = 10
+        self.swapTime = 5
 
     def handle_events(self):
         for event in pygame.event.get():
