@@ -29,7 +29,7 @@ class MainGame:
         self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background)
         #pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.set_volume(0.55)
-        pygame.mixer.music.load("race_main.wav")
+        pygame.mixer.music.load("title.wav")
         pygame.mixer.music.play(-1)
         self.sound_offroad = pygame.mixer.Sound("offroad.wav")
         self.sound_offroad.set_volume(0.30)
@@ -63,7 +63,9 @@ class MainGame:
         self.btn_status_dict['steerer_right']=False
 
         self.willswaprole = False
-        self.swapTime = 5
+        self.swapTime = 12.5
+
+        self.isdangerplay=False
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -144,17 +146,28 @@ class MainGame:
         if keys[pygame.K_u] and self.ui.game_state == "start": 
             self.ui.game_state="running"
             self.running=True
+            pygame.mixer.music.load("race_main.wav")
+            pygame.mixer.music.play(-1)
             return
         if keys[pygame.K_u] and self.ui.game_state == "running" and self.elapsedTime>3000: 
             self.ui.game_state="restart"
+            pygame.mixer.music.load("race_main.wav")
+            pygame.mixer.music.play(-1)
             return
         if keys[pygame.K_u] and self.ui.game_state == "end": 
             self.ui.game_state="restart"
+            pygame.mixer.music.load("race_main.wav")
+            pygame.mixer.music.play(-1)
             return
-        if self.car.position[1]<self.road.road_end_position[1]+450 or self.car.HP<=0:
+        if self.ui.game_state=="running" and (self.car.position[1]<self.road.road_end_position[1]+450 or self.car.HP<=0):
             self.ui.game_state="end"
+            pygame.mixer.music.load("gameover.wav")
+            pygame.mixer.music.play(-1)
             return
-
+        if not self.isdangerplay and self.car.HP<=50:
+            self.isdangerplay = True
+            pygame.mixer.music.load("danger.wav")
+            pygame.mixer.music.play(-1)
 
     def run(self):
         clock = pygame.time.Clock()

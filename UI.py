@@ -137,9 +137,10 @@ class UI:
         
         rendering.screen.blit(self.HPBar_image, (220, 20))
         HPpercent = self.game.car.HP/100.0
+
         if self.game.car.HP>=0:
             for i in range(5):
-                if HPpercent>=i*0.25:
+                if HPpercent>=(i+1)*0.2:
                     rendering.screen.blit(self.HP_image, (220+i*64, 20))
                 else:
                     if self.game.car.isdamage:
