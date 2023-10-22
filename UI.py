@@ -62,6 +62,10 @@ class UI:
 
     def render(self,rendering):
 
+        if self.game_state=="end" : 
+            self.game_end(rendering)
+            return
+        
         if self.game.car.isdamage:
             rendering.screen.blit(self.offroadwarning_image, (0, 0))
 

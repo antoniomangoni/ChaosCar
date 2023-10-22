@@ -142,7 +142,10 @@ class MainGame:
         if keys[pygame.K_u] and self.ui.game_state == "running": 
             self.ui.game_state="restart"
             return
-        if self.car.position[1]<self.road.road_end_position[1]+450:
+        if keys[pygame.K_u] and self.ui.game_state == "end": 
+            self.ui.game_state="restart"
+            return
+        if self.car.position[1]<self.road.road_end_position[1]+450 or self.car.HP<=0:
             self.ui.game_state="end"
             return
 
