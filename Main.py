@@ -75,25 +75,25 @@ class MainGame:
 
     def check_key_states(self):
         #keys = self.Pi.read_input() #dont delete this!
-        keys = pygame.key.get_pressed()
+        self.keys = pygame.key.get_pressed()
 
         self.btn_status_dict['accelerator']=False
         self.btn_status_dict['steerer_left']=False
         self.btn_status_dict['brake_drift']=False
         self.btn_status_dict['steerer_right']=False
         
-        if keys[pygame.K_m]:
+        if self.keys[pygame.K_m]:
             print("Pause")
-        if keys[pygame.K_w]:
+        if self.keys[pygame.K_w]:
             self.call_control_method("accelerator", self.controlM[0])
             self.btn_status_dict['accelerator']=True
-        if keys[pygame.K_SPACE]:
+        if self.keys[pygame.K_SPACE]:
             self.call_control_method("brake_drift", self.controlM[1])
             self.btn_status_dict['brake_drift']=True
-        if keys[pygame.K_a] and not keys[pygame.K_d]:
+        if self.keys[pygame.K_a] and not self.keys[pygame.K_d]:
             self.call_control_method("steerer_left", self.controlM[2])
             self.btn_status_dict['steerer_left']=True
-        if keys[pygame.K_d] and not keys[pygame.K_a]:
+        if self.keys[pygame.K_d] and not self.keys[pygame.K_a]:
             self.call_control_method("steerer_right", self.controlM[3])
             self.btn_status_dict['steerer_right']=True
 

@@ -27,26 +27,42 @@ class UI:
         #self.tipfont_2.set_italic(True)
         self.tipfont_3 = pygame.font.Font('ka1.ttf', 30)
         #self.tipfont_3.set_italic(True)
-
-
+        self.control_btn_images = {}
         self.control_images = {}
         control_image_size = 80
 
-        self.forwardbtn_image = pygame.image.load('Pixel_Art/forwardbtn.png')
+        self.forwardbtn_image = pygame.image.load('Pixel_Art/forward_btn.png')
         self.forwardbtn_image = pygame.transform.scale(self.forwardbtn_image, (control_image_size, control_image_size))
-        self.control_images["accelerator"]=self.forwardbtn_image
+        self.control_btn_images[pygame.K_w] = self.forwardbtn_image
 
-        self.backwardbtn_image = pygame.image.load('Pixel_Art/backwardbtn.png')
+        self.backwardbtn_image = pygame.image.load('Pixel_Art/backward_btn.png')
         self.backwardbtn_image = pygame.transform.scale(self.backwardbtn_image, (control_image_size, control_image_size))
-        self.control_images["brake_drift"]=self.backwardbtn_image
+        self.control_btn_images[pygame.K_SPACE] = self.backwardbtn_image
 
-        self.rightbtn_image = pygame.image.load('Pixel_Art/rightbtn.png')
+        self.rightbtn_image = pygame.image.load('Pixel_Art/right_btn.png')
         self.rightbtn_image = pygame.transform.scale(self.rightbtn_image, (control_image_size, control_image_size))
-        self.control_images["steerer_right"]=self.rightbtn_image
+        self.control_btn_images[pygame.K_d] = self.rightbtn_image
 
-        self.leftbtn_image = pygame.image.load('Pixel_Art/leftbtn.png')
+        self.leftbtn_image = pygame.image.load('Pixel_Art/left_btn.png')
         self.leftbtn_image = pygame.transform.scale(self.leftbtn_image, (control_image_size, control_image_size))
-        self.control_images["steerer_left"]=self.leftbtn_image
+        self.control_btn_images[pygame.K_a] = self.leftbtn_image
+        
+        #arrow!
+        self.forward_image = pygame.image.load('Pixel_Art/forward.png')
+        self.forward_image = pygame.transform.scale(self.forward_image, (control_image_size, control_image_size))
+        self.control_images["accelerator"]=self.forward_image
+
+        self.backward_image = pygame.image.load('Pixel_Art/backward.png')
+        self.backward_image = pygame.transform.scale(self.backward_image, (control_image_size, control_image_size))
+        self.control_images["brake_drift"]=self.backward_image
+
+        self.right_image = pygame.image.load('Pixel_Art/right.png')
+        self.right_image = pygame.transform.scale(self.right_image, (control_image_size, control_image_size))
+        self.control_images["steerer_right"]=self.right_image
+
+        self.left_image = pygame.image.load('Pixel_Art/left.png')
+        self.left_image = pygame.transform.scale(self.left_image, (control_image_size, control_image_size))
+        self.control_images["steerer_left"]=self.left_image
 
         self.btnbackground_image = pygame.image.load('Pixel_Art/btnbackground.png')
 
@@ -96,12 +112,22 @@ class UI:
 
         # show button
         if (self.game.willswaprole and self.game.elapsedTime%200 > 100) or not self.game.willswaprole:
-            for i in range(len(self.game.car.roles)):
+            idx=0
+            down_btn_idxs=[False,False,False,False]
+            for key in self.control_btn_images:
+                offset = 0
+                if self.game.keys[key]==True:
+                    offset = 10
+                down_btn_idxs[idx]=True
+                rendering.screen.blit(self.control_btn_images[key], (150+500/4*idx+32, 515+offset))
+                idx+=1
+
+            for i in range(4):
                 role_name = self.game.car.roles[i]["name"]
                 control_image = self.control_images[role_name]
 
                 offset = 0
-                if self.game.btn_status_dict[role_name]==True:
+                if down_btn_idxs[i]:
                     offset = 10
 
                 rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
@@ -131,11 +157,11 @@ class UI:
         self.timeimg = self.tipfont_2.render('SCORE: '+str(self.game.scores), True, RED)
         rendering.screen.blit(self.timeimg, (150, 340))
 
-        if self.ui.game.elapsedTime%200 > 100:
-            self.ui.tipimg = self.ui.tipfont.render('PRESS WHITE BUTTON', True, WHITE)
-            self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 490 - self.ui.tipimg.get_height() // 2))
-            self.ui.tipimg = self.ui.tipfont.render('TO RESTART!', True, WHITE)
-            self.screen.blit(self.ui.tipimg, (400 - self.ui.tipimg.get_width() // 2, 535 - self.ui.tipimg.get_height() // 2))
+        if self.game.elapsedTime%200 > 100:
+            self.tipimg = self.tipfont.render('PRESS WHITE BUTTON', True, WHITE)
+            self.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
+            self.tipimg = self.tipfont.render('TO RESTART!', True, WHITE)
+            self.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 535 - self.tipimg.get_height() // 2))
 
     def change_ui_state(self, state="start"):
         self.game_state = state
