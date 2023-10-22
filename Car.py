@@ -4,7 +4,8 @@ import pygame
 from math import sin, cos, radians
 
 class Car:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, game):
+        self.game = game
         self.car_width = 64
         self.car_height = 128
         #self.position = [screen_width // 2, screen_height - self.car_height]
@@ -55,6 +56,12 @@ class Car:
 
         self.previous_pos_x=0
         self.move = False
+
+        self.HP = 100
+        self.isdamage = False
+
+        
+
     def update(self):
         self.update_state()
         self.update_friction()
@@ -109,6 +116,17 @@ class Car:
         # Update car image and rect
         self.car_image = self.rot_center(self.original_car_image, self.wheel_angle)
         self.car_rect = self.car_image.get_rect(center=self.position)
+
+        self.isdamage = False
+        self.max_speed = 3
+        if self.isonroad and not self.ispartiallyoffroad:     
+            self.game.sound_offroad.stop() 
+            pass
+        else:
+            self.max_speed = 2
+            self.HP-=0.07
+            self.isdamage = True
+            self.game.sound_offroad.play()
 
     def rot_center(self, image, angle):
         loc = image.get_rect().center  #rot_image is not defined 

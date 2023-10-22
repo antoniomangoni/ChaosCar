@@ -34,9 +34,9 @@ class PI:
         self.keys[pygame.K_SPACE] = False
         self.keys[pygame.K_a] = False
         self.keys[pygame.K_d] = False
-        self.keys[pygame.K_KP_ENTER] = False
+        self.keys[pygame.K_m] = False
         if GPIO.input(self.KEY_ENTER) == 0:
-            self.keys[pygame.K_KP_ENTER] = True
+            self.keys[pygame.K_m] = True
         if GPIO.input(self.KEY_W) == 0:
             self.keys[pygame.K_w] = True
         if GPIO.input(self.KEY_S) == 0:

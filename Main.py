@@ -16,15 +16,19 @@ class MainGame:
         self.screen_height = 600
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         
-        self.car = Car(self.screen_width, self.screen_height)
+        self.car = Car(self.screen_width, self.screen_height,self)
         self.road = Road(self.screen_width, self.screen_height)
         self.background = Background(800,600)
         
         self.ui = UI(self)
         self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background)
-        pygame.mixer.music.load("simple_harmony.mid")
+        #pygame.mixer.music.load("simple_harmony.mid")
+        pygame.mixer.music.set_volume(0.55)
+        pygame.mixer.music.load("race_main.wav")
         pygame.mixer.music.play(-1)
-        
+        self.sound_offroad = pygame.mixer.Sound("offroad.wav")
+        self.sound_offroad.set_volume(0.35)
+
         self.role_timer = pygame.USEREVENT + 1  
         pygame.time.set_timer(self.role_timer, 3000) # 300 seconds interval for role swap
         
@@ -65,7 +69,8 @@ class MainGame:
         self.btn_status_dict['brake_drift']=False
         self.btn_status_dict['steerer_right']=False
         
-        
+        if keys[pygame.K_m]:
+            print("Pause")
         if keys[pygame.K_w]:
             self.call_control_method("accelerator", self.controlM[0])
             self.btn_status_dict['accelerator']=True
@@ -91,9 +96,11 @@ class MainGame:
 
         if self.car.isonroad and not self.car.ispartiallyoffroad:
             #self.Pi.stopvibrate()
-            print("StopVib")
+            #print("StopVib")
+            pass
         else:
-            print("Vib")
+            #print("Vib")           
+            pass
             #self.Pi.vibrate()
 
         # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
@@ -142,7 +149,7 @@ class MainGame:
             self.elapsedTime += ms
             self.secondscounter += ms
             self.updateScore()
-
+           
             if self.ui.game_state:
                 if self.secondscounter>1000:
                     self.secondscounter = 0   

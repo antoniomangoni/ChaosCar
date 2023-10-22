@@ -41,10 +41,19 @@ class UI:
         self.tipfont_1 = pygame.font.SysFont('Courier', 80, True)
         self.tipfont_1.set_italic(True)
 
+        self.HPBar_image = pygame.image.load('Pixel_Art/HPBar.png')
+        self.HPBar_image = pygame.transform.scale(self.HPBar_image, (320, 64))
+        self.HP_image = pygame.image.load('Pixel_Art/HP.png')
+        self.HP_image = pygame.transform.scale(self.HP_image, (64, 64))
+
+        self.offroadwarning_image = pygame.image.load('Pixel_Art/offroadwarning_fullscreen.png')
+        self.offroadwarning_image = pygame.transform.scale(self.offroadwarning_image, (800, 600))
     def update(self):
         return
 
     def render(self,rendering):
+        if self.game.car.isdamage:
+            rendering.screen.blit(self.offroadwarning_image, (0, 0))
 
         self.timeimg = self.font.render('TIME:'+str(self.game.seconds), True, RED)
         rendering.screen.blit(self.timeimg, (20, 20))
@@ -75,7 +84,20 @@ class UI:
             rendering.screen.blit(control_image, (150+500/4*i+32, 515+offset))
         
         
-
+        rendering.screen.blit(self.HPBar_image, (220, 20))
+        HPpercent = self.game.car.HP/100.0
+        if self.game.car.HP>=0:
+            for i in range(5):#0 1 2 3 4
+                if HPpercent>=i*0.25:
+                    rendering.screen.blit(self.HP_image, (220+i*64, 20))
+                else:
+                    if self.game.car.isdamage:
+                        if self.game.elapsedTime%200 > 100:
+                            rendering.screen.blit(self.HP_image, (220+i*64, 20))
+                    else:
+                        rendering.screen.blit(self.HP_image, (220+i*64, 20))
+                    break
+        
 
     def game_end(self,rendering):
         self.timeimg = self.tipfont_1.render('Game Finish', True, RED)
