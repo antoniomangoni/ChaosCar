@@ -48,6 +48,7 @@ class MainGame:
 
         self.controlM = [self.car.accelerate,self.car.brake_or_drift,self.car.steer_left,self.car.steer_right]
 
+        #self.Pi = PI(self) don't delete this!
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -58,6 +59,7 @@ class MainGame:
                 pass
 
     def check_key_states(self):
+        #keys = self.Pi.read_input() #dont delete this!
         keys = pygame.key.get_pressed()
 
         self.btn_status_dict['accelerator']=False
@@ -88,6 +90,18 @@ class MainGame:
             self.car.update()
         self.car.is_onroad(self.rendering)
 
+
+        if self.car.isonroad and not self.car.ispartiallyoffroad:
+            #self.Pi.stopvibrate()
+            print("StopVib")
+        else:
+            print("Vib")
+            #self.Pi.vibrate()
+
+        # print("On road: ",self.car.isonroad," Partially off road: ",self.car.ispartiallyoffroad)
+        # self.road.update() # ideally I would like a cyclic array to store the road points and update them here so we can save memory.
+        self.ui.update()
+        # print(self.car.status())
 
     def render(self):
         self.rendering.draw_objects()
