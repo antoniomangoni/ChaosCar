@@ -190,7 +190,7 @@ class MainGame:
                 self.check_key_states()
                 self.update()
                 self.lateUpdate()      
-                self.ms = self.clock.tick(200)
+                self.ms = self.clock.tick(60)
                 fps = self.clock.get_fps()
                 self.elapsedTime += self.ms
                 self.secondscounter += self.ms
