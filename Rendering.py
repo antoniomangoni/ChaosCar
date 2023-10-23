@@ -84,10 +84,12 @@ class Rendering:
     def draw_road(self):
         _left_border = [0,0]
         _right_border = [0,0]
+
+        _left_border = np.array(self.left_border) - self.pos + self.offset
+        _right_border = np.array(self.right_border) - self.pos + self.offset
+        #_left_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.left_border]
+        #_right_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.right_border]
         
-        _left_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.left_border]
-        _right_border=[(x-self.pos[0] + self.offset[0], y - self.pos[1] + self.offset[1]) for x, y in self.right_border]
- 
         #get road point
         self.road_polygon_points = np.concatenate((self.visible(_left_border),self.visible(_right_border)[::-1]),axis=0)
 

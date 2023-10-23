@@ -192,7 +192,6 @@ class MainGame:
                 self.lateUpdate()      
                 self.ms = self.clock.tick(200)
                 fps = self.clock.get_fps()
-                print(fps)
                 self.elapsedTime += self.ms
                 self.secondscounter += self.ms
                 
