@@ -5,9 +5,11 @@ from Car import Car
 from Road import Road
 from Rendering import Rendering
 from UI import UI
-#from Pi import Pi
+#from Pi import PI
 # from LearningSimulation import LearningSimulation
 from Background import Background
+
+from TestEnemy_ysb import TestEnemy
 
 import gc
 
@@ -22,11 +24,14 @@ class MainGame:
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
         self.car = Car(self.screen_width, self.screen_height,self)
+
+        self.enemy = TestEnemy(self,[-800,-1900])
+
         self.road = Road(self.screen_width, self.screen_height)
         self.background = Background(800,600)
         
         self.ui = UI(self)
-        self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background)
+        self.rendering = Rendering(self.screen, self.road, self.car,self.ui,self.background,self)
         #pygame.mixer.music.load("simple_harmony.mid")
         pygame.mixer.music.set_volume(0.55)
         pygame.mixer.music.load("title.wav")
@@ -40,7 +45,7 @@ class MainGame:
         self.running = True
 
         self.elapsedTime = 0
-
+        self.ms=0
         self.secondscounter = 0
         self.seconds = 0
 
@@ -76,7 +81,7 @@ class MainGame:
                 pass
 
     def check_key_states(self):
-        #keys = self.Pi.read_input() #dont delete this!
+        #self.keys = self.Pi.read_input() #dont delete this!
         self.keys = pygame.key.get_pressed()
 
         self.btn_status_dict['accelerator']=False
@@ -106,6 +111,7 @@ class MainGame:
     def update(self):
         if self.ui.game_state == "running":
             self.car.update()
+            self.enemy.update(self.ms)
         self.car.is_onroad(self.rendering)
 
 
@@ -141,6 +147,8 @@ class MainGame:
 
     def state_check(self):
         keys = pygame.key.get_pressed()
+        #keys = self.Pi.read_input()
+
         if keys[pygame.K_q] :
             quit()
         if keys[pygame.K_u] and self.ui.game_state == "start": 
@@ -181,12 +189,12 @@ class MainGame:
                 self.check_key_states()
                 self.update()
                 self.lateUpdate()      
-                ms = self.clock.tick(90)
+                self.ms = self.clock.tick(90)
                 fps = self.clock.get_fps()
 
-                self.elapsedTime += ms
-                self.secondscounter += ms
-
+                self.elapsedTime += self.ms
+                self.secondscounter += self.ms
+                
                 if self.ui.game_state == "running":
                     if self.secondscounter>1000:
                         self.secondscounter = 0   

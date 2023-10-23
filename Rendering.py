@@ -4,7 +4,8 @@ import pygame.gfxdraw
 from Plants import Plants
 WHITE = (225,225,225)
 class Rendering:
-    def __init__(self, screen, road, car, ui,background):
+    def __init__(self, screen, road, car, ui,background,game):
+        self.game = game
         self.screen = screen
         self.road = road
         self.car = car
@@ -44,8 +45,12 @@ class Rendering:
         self.start_surface = pygame.image.load('Pixel_Art/startmenuimage.png')
         self.start_surface = pygame.transform.scale(self.start_surface, (800, 600))
 
+        #enemy
+        self.enemy = self.game.enemy
+
     def lateUpdate(self):
         self.pos = self.car.position
+        #print(self.pos)
     
     def draw_objects(self):
         #self.screen.blit(self.blackbackground, (0, 0))
@@ -68,6 +73,7 @@ class Rendering:
         self.draw_background()
         self.draw_road()
         self.draw_car()
+        self.draw_enemy()
         self.draw_ui()
 
         pygame.display.flip()
@@ -120,3 +126,6 @@ class Rendering:
     def draw_background(self):
         self.background.draw(self.screen,self)
         self.plants.draw(self.screen,self)
+
+    def draw_enemy(self):
+        self.enemy.draw(self.screen,self)
