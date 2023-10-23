@@ -1,7 +1,8 @@
 import gymnasium as gym
 import numpy as np
 from Main import MainGame
-from pygame import surfarray
+import random
+# from pygame import surfarray
 
 class CarGameEnv(gym.Env):
     def __init__(self):
@@ -11,6 +12,8 @@ class CarGameEnv(gym.Env):
         self.observation_space = gym.spaces.Box(low=0, high=255,
                                                 shape=(self.game_instance.screen_height, self.game_instance.screen_width, 3),
                                                 dtype=np.uint8)
+        self.epsilon = 0.1
+        self.game_instance.car.accelerate()
 
     def reset(self, seed=None, options=None):
         self.game_instance = MainGame(switch=False)
@@ -38,12 +41,23 @@ class CarGameEnv(gym.Env):
         return next_state, reward, done, truncated, info
 
     def _get_state(self):
-        screen = surfarray.array3d(self.game_instance.screen)
+        # screen = surfarray.array3d(self.game_instance.screen)
+        screen = self.game_instance.getScreen()
         # print(f"CarGameEnv --> Screen shape: {screen.shape}")
         return screen.reshape(self.observation_space.shape)
-
+    
     def _get_reward(self):
-        return self.game_instance.getStepScore()
+        reward = -10
+        s = 0
+        if self.game_instance.car.move == True:
+            s += 0.1
+            if self.game_instance.car.drifting == True:
+                s += 0.2
+        else:
+            s -= 0.01
+        if self.game_instance.car.isonroad == False:
+            s -= 0.075
+        return s
 
     def _is_done(self):
         if self.game_instance.running == False:

@@ -1,9 +1,6 @@
 import torch
 import torch.nn as nn
 
-import torch
-import torch.nn as nn
-
 class CarNN(nn.Module):
     def __init__(self, image_shape, action_dim):
         super(CarNN, self).__init__()

@@ -44,8 +44,10 @@ class MainGame:
         self.controlM = []
         self.change = False
 
-        self.controlM = [self.car.accelerate,self.car.brake_or_drift,self.car.steer_left,self.car.steer_right]
-
+        self.controlM = [self.car.accelerate,
+                         self.car.brake_or_drift,
+                         self.car.steer_left,
+                         self.car.steer_right]
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -106,7 +108,8 @@ class MainGame:
                 score = 0.1
                 if self.car.drifting:
                     score += 0.2
-            else: score=0
+            elif self.scores>0:
+                score -= 0.01
         elif self.scores>0:
             score = -0.075
         return score
