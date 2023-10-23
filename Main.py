@@ -156,6 +156,7 @@ class MainGame:
             self.running=True
             pygame.mixer.music.load("race_main.wav")
             pygame.mixer.music.play(-1)
+            print('start')
             return
         if keys[pygame.K_u] and self.ui.game_state == "running" and self.elapsedTime>3000: 
             self.ui.game_state="restart"
@@ -189,9 +190,9 @@ class MainGame:
                 self.check_key_states()
                 self.update()
                 self.lateUpdate()      
-                self.ms = self.clock.tick(90)
+                self.ms = self.clock.tick(200)
                 fps = self.clock.get_fps()
-
+                print(fps)
                 self.elapsedTime += self.ms
                 self.secondscounter += self.ms
                 

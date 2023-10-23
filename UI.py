@@ -33,18 +33,22 @@ class UI:
 
         self.forwardbtn_image = pygame.image.load('Pixel_Art/forward_btn.png')
         self.forwardbtn_image = pygame.transform.scale(self.forwardbtn_image, (control_image_size, control_image_size))
+        self.forwardbtn_image = self.forwardbtn_image.convert_alpha()
         self.control_btn_images[pygame.K_w] = self.forwardbtn_image
 
         self.backwardbtn_image = pygame.image.load('Pixel_Art/backward_btn.png')
         self.backwardbtn_image = pygame.transform.scale(self.backwardbtn_image, (control_image_size, control_image_size))
+        self.backwardbtn_image = self.backwardbtn_image.convert_alpha()
         self.control_btn_images[pygame.K_SPACE] = self.backwardbtn_image
 
         self.leftbtn_image = pygame.image.load('Pixel_Art/left_btn.png')
         self.leftbtn_image = pygame.transform.scale(self.leftbtn_image, (control_image_size, control_image_size))
+        self.leftbtn_image = self.leftbtn_image.convert_alpha()
         self.control_btn_images[pygame.K_a] = self.leftbtn_image
 
         self.rightbtn_image = pygame.image.load('Pixel_Art/right_btn.png')
         self.rightbtn_image = pygame.transform.scale(self.rightbtn_image, (control_image_size, control_image_size))
+        self.rightbtn_image = self.rightbtn_image.convert_alpha()
         self.control_btn_images[pygame.K_d] = self.rightbtn_image
 
        
@@ -52,26 +56,33 @@ class UI:
         #arrow!
         self.forward_image = pygame.image.load('Pixel_Art/forward.png')
         self.forward_image = pygame.transform.scale(self.forward_image, (control_image_size, control_image_size))
+        self.forward_image = self.forward_image.convert_alpha()
         self.control_images["accelerator"]=self.forward_image
 
         self.backward_image = pygame.image.load('Pixel_Art/backward.png')
         self.backward_image = pygame.transform.scale(self.backward_image, (control_image_size, control_image_size))
+        self.backward_image = self.backward_image.convert_alpha()
         self.control_images["brake_drift"]=self.backward_image
 
         self.left_image = pygame.image.load('Pixel_Art/left.png')
         self.left_image = pygame.transform.scale(self.left_image, (control_image_size, control_image_size))
+        self.left_image = self.left_image.convert_alpha()
         self.control_images["steerer_left"]=self.left_image
 
         self.right_image = pygame.image.load('Pixel_Art/right.png')
         self.right_image = pygame.transform.scale(self.right_image, (control_image_size, control_image_size))
+        self.right_image = self.right_image.convert_alpha()
         self.control_images["steerer_right"]=self.right_image
 
         self.btnbackground_image = pygame.image.load('Pixel_Art/btnbackground.png')
+        self.btnbackground_image = self.btnbackground_image.convert()
 
         self.HPBar_image = pygame.image.load('Pixel_Art/HPBar.png')
         self.HPBar_image = pygame.transform.scale(self.HPBar_image, (320, 64))
+        self.HPBar_image = self.HPBar_image.convert_alpha()
         self.HP_image = pygame.image.load('Pixel_Art/HP.png')
         self.HP_image = pygame.transform.scale(self.HP_image, (64, 64))
+        self.HP_image = self.HP_image.convert_alpha()
 
         self.offroadwarning_image = pygame.image.load('Pixel_Art/offroadwarning_fullscreen.png')
         self.offroadwarning_image = pygame.transform.scale(self.offroadwarning_image, (800, 600))
@@ -90,8 +101,10 @@ class UI:
 
 
         self.timeimg = self.font.render('TIME', True, RED)
+        self.timeimg = self.timeimg.convert_alpha()
         rendering.screen.blit(self.timeimg, (20, 20))
         self.timeimg = self.font.render(str(self.game.seconds), True, RED)
+        self.timeimg =  self.timeimg.convert_alpha()
         rendering.screen.blit(self.timeimg, (55, 60))
 
         self.scoreimg = self.font.render('SCORE', True, RED)
@@ -103,17 +116,20 @@ class UI:
         if self.game.enemy.isinsandstorm:
             if self.game.elapsedTime%200 > 100:
                 self.tipimg = self.tipfont_1.render('!!!GET OUT!!!', True, RED)
+                self.tipimg = self.tipimg.convert_alpha()
                 rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
             pass
         else:
             if not self.game.car.isonroad:
                 if self.game.elapsedTime%200 > 100:
                     self.tipimg = self.tipfont_1.render('!!!OFF ROAD!!!', True, RED)
+                    self.tipimg = self.tipimg.convert_alpha()
                     rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
             else:
                 if self.game.car.ispartiallyoffroad:
                     if self.game.elapsedTime%200 > 100:
                         self.tipimg = self.tipfont.render('!OFF ROAD!', True, YELLOW)
+                        self.tipimg = self.tipimg.convert_alpha()
                         rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
             
         # show background
