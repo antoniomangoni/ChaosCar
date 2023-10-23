@@ -102,9 +102,21 @@ class Rendering:
         m=np.random.randint(0,15)
         n=np.random.randint(0,15)
         
-        pygame.gfxdraw.textured_polygon(self.road_surface, self.road_polygon_points, self.road_texture,-int(self.pos[0]),int(self.pos[1]))
+        if self.renderable(self.road_polygon_points): pygame.gfxdraw.textured_polygon(self.road_surface, self.road_polygon_points, self.road_texture,-int(self.pos[0]),int(self.pos[1]))
         #pygame.draw.polygon(self.road_surface, (0, 0, 0), self.road_polygon_points)
         self.screen.blit(self.road_surface,(0,0))
+
+
+    def renderable(self, point):
+        if np.size(point) == 0 : return False
+        a=np.min(point,axis=0)
+        b=np.max(point,axis=0)
+        if b[0] <= 5:
+            return False
+        if a[0] >=795:
+            return False
+        return True
+    
 
     def visible(self,road_point):
         screen_min_y=self.offset[1]-500
