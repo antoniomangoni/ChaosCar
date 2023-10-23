@@ -105,17 +105,17 @@ class UI:
                 self.tipimg = self.tipfont_1.render('!!!GET OUT!!!', True, RED)
                 rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
             pass
-
-        if not self.game.car.isonroad:
-            if self.game.elapsedTime%200 > 100:
-                self.tipimg = self.tipfont_1.render('!!!OFF ROAD!!!', True, RED)
-                rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
         else:
-            if self.game.car.ispartiallyoffroad:
+            if not self.game.car.isonroad:
                 if self.game.elapsedTime%200 > 100:
-                    self.tipimg = self.tipfont.render('!OFF ROAD!', True, YELLOW)
+                    self.tipimg = self.tipfont_1.render('!!!OFF ROAD!!!', True, RED)
                     rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
-        
+            else:
+                if self.game.car.ispartiallyoffroad:
+                    if self.game.elapsedTime%200 > 100:
+                        self.tipimg = self.tipfont.render('!OFF ROAD!', True, YELLOW)
+                        rendering.screen.blit(self.tipimg, (400 - self.tipimg.get_width() // 2, 490 - self.tipimg.get_height() // 2))
+            
         # show background
         rendering.screen.blit(self.btnbackground_image, (0, 517))
 
