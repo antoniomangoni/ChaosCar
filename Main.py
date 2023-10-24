@@ -114,7 +114,6 @@ class MainGame:
             self.enemy.update(self.ms)
         self.car.is_onroad(self.rendering)
 
-
         if self.car.isonroad and not self.car.ispartiallyoffroad:
             #self.Pi.stopvibrate()
             #print("StopVib")
@@ -136,14 +135,12 @@ class MainGame:
         self.rendering.lateUpdate()
 
     def updateScore(self):
-        score = 0
-        if self.car.isonroad:
-            if self.car.move: score = 1
-            else: score=0
-        else :
-            score = -1
-        self.scores += score
-        if self.scores<=0: self.scores=0
+        if not self.car.isonroad:
+            self.scores = max(self.scores -1, 0)
+        elif self.car.isonroad and self.car.move:
+            self.scores += 3 if self.car.drifting else 1
+        else:
+            self.scores = 0 
 
     def state_check(self):
         keys = pygame.key.get_pressed()
